@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const port = 3000;
 const salasProfessores = require("./routes/professores");
 const controllerDisciplina = require("./routes/disciplina");
+const controllerSalas = require("./routes/salas")
 const database = require("./config/database")
 
 
@@ -12,6 +13,8 @@ app.use(bodyParser.json())  //sem isso, não da pra mandar requisição em json 
 
 app.use("/professores", salasProfessores);
 app.use("/disciplina", controllerDisciplina);
+app.use("/salas", controllerSalas);
+
 
 database.connect((erro) => {
     if(erro) {
@@ -19,7 +22,7 @@ database.connect((erro) => {
 
 
     }else{
-        return console.log("conectado ao elephantSQL")
+         console.log("conectado ao elephantSQL")
     }
 })
 

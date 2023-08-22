@@ -4,7 +4,7 @@ const database = require("../config/database")
 
 // FUNÇÂO QUE BUSCA TUDO DA TABELA DE DISCIPLINAS
 exports.busca = (req,res) => {
-    database.query("SELECT * FROM DISCIPLINA").then(
+    database.query("SELECT * FROM disciplina").then(
         (resultado) => {
             res.status(200).send({ disciplinas: resultado.rows})
         },
