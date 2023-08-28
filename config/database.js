@@ -1,4 +1,8 @@
 const pg = require("pg");
-const database = new pg.Client("postgres://xugreage:Y4ocFDG2etUDhzLxHCFFCG5obVTsWkhQ@silly.db.elephantsql.com/xugreage");
+
+const dotenv = require("dotenv");
+dotenv.config()
+const database= new pg.Client(process.env.DATABASE)
+
 
 module.exports=database;
