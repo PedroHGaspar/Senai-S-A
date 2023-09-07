@@ -3,8 +3,10 @@ const bodyParser = require("body-parser");
 const port = 3000;
 const salasProfessores = require("./routes/professores");
 const controllerDisciplina = require("./routes/disciplina");
-const controllerSalas = require("./routes/salas")
-const database = require("./config/database")
+const controllerSalas = require("./routes/salas");
+const controllerEnsalamento = require("./routes/ensalamento");
+const database = require("./config/database");
+
 
 
 const app = express()
@@ -14,6 +16,7 @@ app.use(bodyParser.json())  //sem isso, não da pra mandar requisição em json 
 app.use("/professores", salasProfessores);
 app.use("/disciplina", controllerDisciplina);
 app.use("/salas", controllerSalas);
+app.use("/ensalamento", controllerEnsalamento);
 
 
 database.connect((erro) => {
