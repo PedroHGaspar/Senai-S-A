@@ -4,17 +4,32 @@ const database = require("../config/database")
 
 // FUNÇÂO QUE BUSCA TUDO DA TABELA DE DISCIPLINAS
 exports.ensalar = (req, res) => {
-    const professores = buscarProfessores();
-    const disciplinas = buscarDisciplinas();
-    const salas = buscarSalas();
-    const fases = buscarFases();
-    const turmas = buscarTurmas();
+    // const professores = buscarProfessores();
+    // const disciplinas = buscarDisciplinas();
+    // const salas = buscarSalas();
+    // const fases = buscarFases();
+    // const turmas = buscarTurmas();
+    buscarProfessores();
+    buscarDisciplinas();
+    buscarSalas();
+    buscarFases();
+    buscarTurmas();
+
+
+
+
 }
+
+
+
+
+
 
 buscarProfessores = () => {
     database.query("SELECT * FROM professores").then(
         (resultado) => {
             professores = resultado.rows;
+            console.log("Professores: ",professores);
             return professores;
         },
         (erro) => {
@@ -27,6 +42,7 @@ buscarDisciplinas = () => {
     database.query("SELECT * FROM disciplina").then(
         (resultado) => {
             disciplinas = resultado.rows;
+            console.log("disciplinas: ",disciplinas);
             return disciplinas;
         },
         (erro) => {
@@ -39,6 +55,7 @@ buscarSalas = () => {
     database.query("SELECT * FROM salas").then(
         (resultado) => {
             salas = resultado.rows;
+            console.log("Salas: ",salas);
             return salas;
         },
         (erro) => {
@@ -48,10 +65,11 @@ buscarSalas = () => {
 }
 
 buscarFases = () => {
-    database.query("SELECT * FROM fases").then(
+    database.query("SELECT * FROM fase").then(
         (resultado) => {
-            fases = resultado.rows;
-            return fases;
+            fase = resultado.rows;
+            console.log("fases: ",fase);
+            return fase;
         },
         (erro) => {
             res.status(500).send({ erro: erro })
@@ -60,10 +78,11 @@ buscarFases = () => {
 }
 
 buscarTurmas = () => {
-    database.query("SELECT * FROM turmas").then(
+    database.query("SELECT * FROM turma").then(
         (resultado) => {
-            turmas = resultado.rows;
-            return turmas;
+            turma = resultado.rows;
+            console.log("Turmas: ",turma);
+            return turma;
         },
         (erro) => {
             res.status(500).send({ erro: erro })
