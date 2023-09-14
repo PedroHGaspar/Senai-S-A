@@ -1,13 +1,13 @@
 const pg = require("pg");
 
-export default class DisciplinaFacade {
+module.exports = class DisciplinaFacade {
 
     constructor() {
         this.conectarDatabase()
     }
 
     async conectarDatabase() {
-        this.client = new pg.Client("URL")
+        this.client = new pg.Client("postgres://xugreage:Y4ocFDG2etUDhzLxHCFFCG5obVTsWkhQ@silly.db.elephantsql.com/xugreage")
         await this.client.connect()
     }
 
