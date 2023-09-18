@@ -2,19 +2,36 @@ const SalaFacade = require("../facades/Salas");
 const sala_Facade = new SalaFacade()
 
 // FUNÇÃO GET
+
+exports.listarSalas= async (req, res) => {
+    const salasLista = await sala_Facade.listarSalas()
+    res.status(200).send({ salasLista })
+}
+
 exports.buscarSala = async (req, res) => {
-    const numeroSala = req.params.numeroSala;
+    const numeroSala = req.params.num_sala;
     const salas = await sala_Facade.buscarSalaPorNumero(numeroSala);
     res.status(200).send({ salas })
 }
 // FUNÇÃO POST
 exports.criarSala = async (req, res) => {
-    const criarNovaSala = [req.body.id_sala, req.body.num_sala, req.body.qtd_maxima, req.body.tipo];
-    const salasNovas = await sala_Facade.criarSala(criarNovaSala)
-    res.status(200).send({ salasNovas })
+    const { id_sala, num_sala, qtd_maxima, tipo } = req.body;
+    const salaNovas = await sala_Facade.criarSala(id_sala, num_sala, qtd_maxima, tipo)
+    res.status(200).send("Sala Criada")
 }
 
+exports.editarSala = async (req, res) => {
+    const id_sala = req.params.id_sala;
+    const { num_sala, qtd_maxima, tipo } = req.body;
+    const salaEditada = await sala_Facade.editarSala( id_sala, num_sala, qtd_maxima, tipo )
+    res.status(200).send("Sala Editada")
+}
 
+exports.deletarSala = async (req, res) => {
+    const deletarSalaExistente = req.params.id_sala;
+    const salaDeletada = await sala_Facade.deletarSala(deletarSalaExistente)
+    res.status(200).send("Sala Deletada")
+}
 
 
 
