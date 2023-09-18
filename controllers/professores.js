@@ -2,50 +2,31 @@ const ProfessoresFacade = require("../facades/Professores");
 const professores_Facade = new ProfessoresFacade()
 
 
+exports.listarProfessores = async (req, res) => {
+    const professoresLista = await professores_Facade.listarProfessores()
+    res.status(200).send({ professoresLista })
+}
+
 exports.buscarProfessores = async (req, res) => {
-    const professoresDataBase = req.params.professores;
+    const professoresDataBase = req.params.nome;
     const professores = await professores_Facade.buscarProfessorPeloNome(professoresDataBase)
     res.status(200).send({ professores })
 }
 exports.adicionarProfessor = async (req, res) => {
-    const adicionarProfessorNovo =[req.body.id_prof, req.body.nome, req.body.disp_semana];
-    const professorNovo = await professores_Facade.adicionarProfessor(adicionarProfessorNovo)
-    res.status(200).send({ professorNovo })
+    const { id_prof, nome, disp_semana } = req.body;
+    const professorNovo = await professores_Facade.adicionarProfessor(id_prof, nome, disp_semana)
+    res.status(200).send("Professor Adcionado")
 }
 
+exports.editarProfessor = async (req, res) => {
+    const id_prof = req.params.id_prof;
+    const { nome, disp_semana } = req.body;
+    const professorEditado = await professores_Facade.editarProfessor(id_prof, nome, disp_semana)
+    res.status(200).send("Professor Editado")
+}
 
-// // FUNÇÃO DE ATUALIZAR DADOS
-// exports.put = (req, res) => {
-//     const query = "UPDATE PROFESSORES SET nome=$2, horarios=$3, disciplinas=$4 WHERE id=$1;"; // nesse caso aqui tem 5 valores com $, ali nos values escrevi na ordem que escreveria no body do site que relacionamos com o banco através do URL(postman)
-//     const values = [
-//         req.params.id,
-//         req.body.nome,
-//         req.body.horarios,
-//         req.body.disciplinas
-
-//     ]
-//     database.query(query, values).then(
-//         () => {
-//             res.status(200).send({ mensagem: "Professor atualizada com sucesso!" })
-//         },
-//         (erro) => {
-//             res.status(500).send({ erro: erro })
-//         }
-//     )
-// }
-
-// // FUNÇÃO DELETE
-// exports.deletar = (req, res) => {
-//     const query = "DELETE FROM PROFESSORES WHERE id=$1;";
-//     const values = [req.params.id];
-
-//     database.query(query, values).then(
-//         () => {
-//             res.status(200).json({ mensagem: "Professor removida com sucesso!" })
-//         },
-//         (erro) => {
-//             res.status(500).send({ erro: erro })
-//         }
-//     )
-
-// }
+exports.deletarProfessor = async (req, res) => {
+    const deletarProfessorExistente = req.params.id_prof;
+    const professorDeletado = await professores_Facade.deletarProfessor(deletarProfessorExistente)
+    res.status(200).send("Professor Deletado")
+}
