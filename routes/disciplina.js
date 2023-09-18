@@ -2,9 +2,10 @@ const express = require('express');
 const router = express.Router();
 const controller = require('./../controllers/disciplina');
 
-router.get('/lista', controller.busca)
-router.post('/postar', controller.postar);
-// router.put('/atualizar/:id' , controller.put);
-// router.delete('/deletar/:id' , controller.deletar);
+router.get('/lista/', controller.listarDisciplina)
+router.get('/lista/:nm_disciplina', controller.buscarDisciplina)
+router.post('/postar', controller.adicionarDisciplina);
+router.put('/atualizar/:id_discip' , controller.editarDisciplina);
+router.delete('/deletar/:id_discip' , controller.deletarDisciplina);
 
 module.exports = router;

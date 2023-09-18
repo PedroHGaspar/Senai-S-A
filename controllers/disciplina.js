@@ -1,69 +1,32 @@
-const express = require('express');
-const router = express.Router();
-const database = require("../config/database")
+const DisciplinaFacade = require("../facades/Disciplina");
+const disciplina_Facade = new DisciplinaFacade()
 
-// FUNÇÂO QUE BUSCA TUDO DA TABELA DE DISCIPLINAS
-exports.busca = (req,res) => {
-    database.query("SELECT * FROM disciplina").then(
-        (resultado) => {
-            res.status(200).send({ disciplinas: resultado.rows})
-        },
-        (erro) => {
-            res.status(500).send({ erro: erro})
-        }
-    )
+
+exports.listarDisciplina = async (req, res) => {
+    const disciplinasLista = await disciplina_Facade.listarDisciplina()
+    res.status(200).send({ disciplinasLista })
 }
 
-
-
-// FUNÇÃO DE POST
-exports.postar = (req,res) => {
-    const query = "INSERT INTO DISCIPLINA(id, nome, carga_horaria, preco) values ($1, $2, $3, $4);"; // o $1 indica que aquele valor, entre aqueles que será enviado, será o primeiro e assim sucessivamente, até o 5 nesse caso
-    const values = [req.body.id, req.body.nome, req.body.carga_horaria, req.body.preco];
-
-    database.query(query, values).then(
-        () => {
-            res.status(200).send({ mensagem: "Disciplina cadastrado com sucesso!" })
-        },
-        (erro) => {
-            res.status(500).send({erro: erro})
-        }
-    )
-
+exports.buscarDisciplina = async (req, res) => {
+    const disciplinaDataBase = req.params.nm_disciplina;
+    const disciplinas = await disciplina_Facade.buscarDisciplinaPeloNome(disciplinaDataBase)
+    res.status(200).send({ disciplinas })
+}
+exports.adicionarDisciplina = async (req, res) => {
+    const { id_discip, nm_disciplina, qtd_dias, num_fase } = req.body;
+    const disciplinaNova = await disciplina_Facade.adicionarDisciplina(id_discip, nm_disciplina, qtd_dias, num_fase)
+    res.status(200).send("Disciplina Criada")
 }
 
-// // FUNÇÃO DE ATUALIZAR DADOS
-// exports.put = (req,res) => {
-//     const query = "UPDATE DISCIPLINA SET nome=$2, carga_horaria=$3, preco=$4 WHERE id=$1;"; // nesse caso aqui tem 5 valores com $, ali nos values escrevi na ordem que escreveria no body do site que relacionamos com o banco através do URL(postman)
-//     const values = [
-//         req.params.id,
-//         req.body.nome,
-//         req.body.carga_horaria,
-//         req.body.preco
-        
-//     ]
-//     database.query(query, values).then(
-//         () => {
-//             res.status(200).send({ mensagem: "Disciplinas atualizada com sucesso!"})
-//         },
-//         (erro) => {
-//             res.status(500).send({ erro: erro})
-//         }
-//     )
-// }
+exports.editarDisciplina = async (req, res) => {
+    const id_discip = req.params.id_discip;
+    const { nm_disciplina, qtd_dias, num_fase } = req.body;
+    const disciplinaEditado = await disciplina_Facade.editarDisciplina(id_discip, nm_disciplina, qtd_dias, num_fase)
+    res.status(200).send("Disciplina Editado")
+}
 
-// // FUNÇÃO DELETE
-// exports.deletar = (req,res) => {
-//     const query = "DELETE FROM DISCIPLINA WHERE id=$1;"; 
-//     const values = [req.params.id];
-
-//     database.query(query, values).then(
-//         () => {
-//             res.status(200).json({ mensagem: "Professor removida com sucesso!"})
-//         },
-//         (erro) => {
-//             res.status(500).send({ erro: erro})
-//         }
-//     )
-
-// }
+exports.deletarDisciplina = async (req, res) => {
+    const deletarDisciplinaExistente = req.params.id_discip;
+    const disciplinaDeletado = await disciplina_Facade.deletarDisciplina(deletarDisciplinaExistente)
+    res.status(200).send("Disciplina Deletado")
+}
