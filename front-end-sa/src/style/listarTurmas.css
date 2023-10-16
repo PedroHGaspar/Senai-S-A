@@ -1,0 +1,44 @@
+.lista-turma {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 600px;
+    gap: 30px;
+    padding: 1rem;
+    font-family: sans-serif;
+    font-size: 1.2rem;
+    background: #eee;
+    border-radius: 0.5rem;
+    margin: 1rem 0rem;
+}
+
+.button-editar,
+.button-excluir {
+    background: none;
+    width: auto;
+    height: auto;
+    padding: 7px 7px;
+    background-color: #eee;
+}
+svg{
+    background-color: #eee;
+}
+
+.buttons-lista {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background-color: #eee;
+}
+
+.lista-container li{
+    font-size: 28px;
+}
+
+.lista-scroll {
+    max-height: 500px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
