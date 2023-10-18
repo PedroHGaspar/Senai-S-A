@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
 import "../style/listarDisciplinas.css"
 
 const ListarDisciplinas = () => {
