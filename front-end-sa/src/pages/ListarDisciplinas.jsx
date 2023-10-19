@@ -1,15 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import "../style/listarDisciplinas.css"
 
 const ListarDisciplinas = () => {
     const [disciplinas, setDisciplinas] = useState([
-        { id: 1, nome: 'Teste de Sistemas' },
-        { id: 2, nome: 'Eletrônica' },
-        { id: 3, nome: 'Aplicativos' },
-        { id: 4, nome: 'Banco de Dados' },
-        { id: 5, nome: 'Fluxograma' },
+        //Teste:
+        // { id: 1, nome: 'Teste de Sistemas' },
+        // { id: 2, nome: 'Eletrônica' },
+        // { id: 3, nome: 'Aplicativos' },
+        // { id: 4, nome: 'Banco de Dados' },
+        // { id: 5, nome: 'Fluxograma' },
     ]);
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+            try {
+                let api = `http://localhost:3000/disciplina/lista`;
+
+                // if (pesquisaNome) {
+                //   api += `?name=${pesquisaNome}`
+                // } else if (characterStatus) {
+                //   api += `?status=${characterStatus}`
+                // }
+
+                let response = await fetch(api)
+                const data = await response.json();
+                setDisciplinas(data);
+                console.log(data);
+
+            } catch (error) {
+                console.error('Deu ruim: ', error)
+            }
+        }
+
+        fetchData();
+
+
+    }, [])
 
     const [newDisciplina, setNewDisciplina] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -68,9 +96,9 @@ const ListarDisciplinas = () => {
         <div className='container'>
             <h1 className='title-header'>Lista de disciplinas</h1>
             <ul className='container-lista lista-scroll'>
-                {disciplinas.map(disciplina => (
-                    <li className='lista-disciplinas' key={disciplina.id}>
-                        {disciplina.nome}
+                {Object.values(disciplinas.disciplinasLista || {}).map(disciplina => (
+                    <li className='lista-disciplinas' key={disciplina.id_discip}>
+                        {disciplina.nm_disciplina}
                         <div className='buttons-lista'>
                             <button className='button-editar' onClick={() => handleEditar(disciplina)}>
                                 <FaEdit />

@@ -1,16 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import "../style/listarProfessores.css"
 
 const ListarProfessores = () => {
     const [professores, setProfessores] = useState([
-        { id: 1, nome: 'Pedro Henrique Gaspar' },
-        { id: 2, nome: 'Vitou Hugo de Souza' },
-        { id: 3, nome: 'Alexandre o Grande Rei de Todos' },
-        { id: 4, nome: 'Eric - O Mais Temível' },
-        { id: 5, nome: 'Enzo - O Mais Poderoso' },
+        //Teste:
+        // { id: 1, nome: 'Pedro Henrique Gaspar' },
+        // { id: 2, nome: 'Vitou Hugo de Souza' },
+        // { id: 3, nome: 'Alexandre o Grande Rei de Todos' },
+        // { id: 4, nome: 'Eric - O Mais Temível' },
+        // { id: 5, nome: 'Enzo - O Mais Poderoso' },
     ]);
+
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+            try {
+                let api = `http://localhost:3000/professores/lista`;
+
+                // if (pesquisaNome) {
+                //   api += `?name=${pesquisaNome}`
+                // } else if (characterStatus) {
+                //   api += `?status=${characterStatus}`
+                // }
+
+                let response = await fetch(api)
+                const data = await response.json();
+                setProfessores(data);
+                console.log(data);
+
+            } catch (error) {
+                console.error('Deu ruim: ', error)
+            }
+        }
+
+        fetchData();
+
+
+    }, [])
 
     const [newProfessorName, setNewProfessorName] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -69,8 +98,8 @@ const ListarProfessores = () => {
         <div className='container'>
             <h1 className='title-header'>Lista de Professores</h1>
             <ul className='container-lista lista-scroll'>
-                {professores.map(professor => (
-                    <li className='lista-professores' key={professor.id}>
+                {Object.values(professores.professoresLista || {}).map(professor => (
+                    <li className='lista-professores' key={professor.id_prof}>
                         {professor.nome}
                         <div className='buttons-lista'>
                             <button className='button-editar' onClick={() => handleEditar(professor)}>
@@ -82,6 +111,7 @@ const ListarProfessores = () => {
                         </div>
                     </li>
                 ))}
+
             </ul>
             <button onClick={openModal} className="botao-cadastrar">
                 Cadastrar Professor

@@ -1,18 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import "../style/listarSalas.css"
 
 const Listarsalas = () => {
     const [salas, setSalas] = useState([
-        { id: 1, nome: '400' },
-        { id: 2, nome: '401' },
-        { id: 3, nome: '402' },
-        { id: 4, nome: '403' },
-        { id: 5, nome: '404' },
-        { id: 6, nome: '405' },
-        { id: 7, nome: '406' },
+        //Teste
+        // { id: 1, nome: '400' },
+        // { id: 2, nome: '401' },
+        // { id: 3, nome: '402' },
+        // { id: 4, nome: '403' },
+        // { id: 5, nome: '404' },
+        // { id: 6, nome: '405' },
+        // { id: 7, nome: '406' },
     ]);
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+            try {
+                let api = `http://localhost:3000/salas/lista`;
+
+                // if (pesquisaNome) {
+                //   api += `?name=${pesquisaNome}`
+                // } else if (characterStatus) {
+                //   api += `?status=${characterStatus}`
+                // }
+
+                let response = await fetch(api)
+                const data = await response.json();
+                setSalas(data);
+                console.log(data);
+
+            } catch (error) {
+                console.error('Deu ruim: ', error)
+            }
+        }
+
+        fetchData();
+
+
+    }, [])
 
     const [newSalas, setNewSalas] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -71,9 +99,9 @@ const Listarsalas = () => {
         <div className='container'>
             <h1 className='title-header'>Lista de salas</h1>
             <ul className='container-lista lista-scroll'>
-                {salas.map(sala => (
-                    <li className='lista-salas' key={sala.id}>
-                        {sala.nome}
+                {Object.values(salas.salasLista || {}).map(sala => (
+                    <li className='lista-salas' key={sala.id_sala}>
+                        {sala.num_sala}
                         <div className='buttons-lista'>
                             <button className='button-editar' onClick={() => handleEditar(sala)}>
                                 <FaEdit />
