@@ -1,17 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import "../style/listarTurmas.css"
 
 const ListarTurmas = () => {
     const [turmas, setTurmas] = useState([
-        { id: 1, nome: 'N1' },
-        { id: 2, nome: 'N2' },
-        { id: 3, nome: 'N3' },
-        { id: 4, nome: 'N4' },
-        { id: 5, nome: 'N5' },
-        { id: 6, nome: 'N6' },
+        //Teste:
+        // { id: 1, nome: 'N1' },
+        // { id: 2, nome: 'N2' },
+        // { id: 3, nome: 'N3' },
+        // { id: 4, nome: 'N4' },
+        // { id: 5, nome: 'N5' },
+        // { id: 6, nome: 'N6' },
     ]);
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+            try {
+                let api = `http://localhost:3000/turmas/lista`;
+
+                // if (pesquisaNome) {
+                //   api += `?name=${pesquisaNome}`
+                // } else if (characterStatus) {
+                //   api += `?status=${characterStatus}`
+                // }
+
+                let response = await fetch(api)
+                const data = await response.json();
+                setTurmas(data);
+                console.log(data);
+
+            } catch (error) {
+                console.error('Deu ruim: ', error)
+            }
+        }
+
+        fetchData();
+
+
+    }, [])
 
     const [newTurma, setNewTurma] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -70,9 +98,9 @@ const ListarTurmas = () => {
         <div className='container'>
             <h1 className='title-header'>Lista de turmas</h1>
             <ul className='container-lista lista-scroll'>
-                {turmas.map(turma => (
-                    <li className='lista-turma' key={turma.id}>
-                        {turma.nome}
+                {Object.values(turmas.turmasLista || {}).map(turma => (
+                    <li className='lista-turma' key={turma.id_turma}>
+                        {turma.nm_turma}
                         <div className='buttons-lista'>
                             <button className='button-editar' onClick={() => handleEditar(turma)}>
                                 <FaEdit />
