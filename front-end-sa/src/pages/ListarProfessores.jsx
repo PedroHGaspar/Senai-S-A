@@ -39,9 +39,10 @@ const ListarProfessores = () => {
         fetchData();
 
 
-    }, [])
+    }, [professores])
 
     const [newProfessorName, setNewProfessorName] = useState('');
+    const [newDisp, setNewDisp] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProfessor, setSelectedProfessor] = useState(null);
 
@@ -53,24 +54,83 @@ const ListarProfessores = () => {
         setIsModalOpen(false);
         setSelectedProfessor(null);
         setNewProfessorName('');
+        setNewDisp('')
+
     }
 
     const handleNameChange = (e) => {
         setNewProfessorName(e.target.value);
     }
+    const handleDispChange = (e) => {
+        setNewDisp(e.target.value)
+    }
+    
 
     const handleCadastrar = () => {
-        if (newProfessorName.trim() !== '') {
-            const newId = professores.length + 1;
-            setProfessores([...professores, { id: newId, nome: newProfessorName }]);
-            setNewProfessorName('');
-            closeModal();
+        
+        //We have to make this dont duplicate you know
+        let id_creator = professores.professoresLista.length + 1
+        
+        const fetchData = async () => {
+            console.log(newDisp)
+            console.log(newProfessorName)
+            console.log(professores.professoresLista.length)
+
+            
+
+            try {
+                let api = `http://localhost:3000/professores/postar`;
+                let response = await fetch(api, { method: 'POST',
+                body: JSON.stringify({
+                    "id_prof": id_creator,
+                    "nome":`${newProfessorName}`,
+                    "disp_semana":`${newDisp}`
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+            })
+                const data = await response.json();
+                setProfessores(data);
+                console.log(data);
+                console.log(newDisp)
+                 console.log(newProfessorName)
+
+            } catch (error) {
+                console.error('Deu ruim: ', error)
+                fetchData();
+            }
         }
+
+        fetchData();
+        closeModal();
+
+        // if (newProfessorName.trim() !== '') {
+        //     const newId = professores.length + 1;
+        //     setProfessores([...professores, { id: newId, nome: newProfessorName, disp_semana: newDisp  }]);
+        //     setNewProfessorName('');
+        //     setNewDisp('')
+        //     closeModal();
+        // }
     }
 
-    const handleExcluir = (professorId) => {
-        const updatedProfessores = professores.filter(professor => professor.id !== professorId);
-        setProfessores(updatedProfessores);
+    const handleExcluir = (id_prof) => {
+        const fetchData = async () => {
+            try {
+                let api = `http://localhost:3000/professores/deletar/${id_prof}`;
+                let response = await fetch(api, { method: 'DELETE'})
+                const data = await response.json();
+                setProfessores(data);
+                console.log(data);
+
+            } catch (error) {
+                console.error('Deu ruim: ', error)
+            }
+        }
+
+        fetchData();
+        // const updatedProfessores = professores.filter(professor => professor.id !== professorId);
+        // setProfessores(updatedProfessores);
     }
 
     const handleEditar = (professor) => {
@@ -83,12 +143,13 @@ const ListarProfessores = () => {
         if (newProfessorName.trim() !== '') {
             const updatedProfessores = professores.map(professor => {
                 if (professor.id === selectedProfessor.id) {
-                    return { ...professor, nome: newProfessorName };
+                    return { ...professor, nome: newProfessorName, disp_semana: newDisp };
                 }
                 return professor;
             });
             setProfessores(updatedProfessores);
             setNewProfessorName('');
+            setNewDisp('')
             setSelectedProfessor(null);
             closeModal();
         }
@@ -105,7 +166,7 @@ const ListarProfessores = () => {
                             <button className='button-editar' onClick={() => handleEditar(professor)}>
                                 <FaEdit />
                             </button>
-                            <button className='button-excluir' onClick={() => handleExcluir(professor.id)}>
+                            <button className='button-excluir' onClick={() => handleExcluir(professor.id_prof)}>
                                 <FaTrash />
                             </button>
                         </div>
@@ -125,6 +186,12 @@ const ListarProfessores = () => {
                             placeholder="Nome"
                             value={newProfessorName}
                             onChange={handleNameChange}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Disponibilidade"
+                            value={newDisp}
+                            onChange={handleDispChange}
                         />
                         <button onClick={selectedProfessor ? handleSalvarEdicao : handleCadastrar}>
                             {selectedProfessor ? 'Salvar' : 'Cadastrar'}

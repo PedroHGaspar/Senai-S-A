@@ -39,7 +39,7 @@ const ListarTurmas = () => {
         fetchData();
 
 
-    }, [])
+    }, [turmas])
 
     const [newTurma, setNewTurma] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -68,9 +68,23 @@ const ListarTurmas = () => {
         }
     }
 
-    const handleExcluir = (turmasId) => {
-        const updatedTurmas = turmas.filter(turma => turma.id !== turmasId);
-        setTurmas(updatedTurmas);
+    const handleExcluir = (id_turma) => {
+        const fetchData = async () => {
+            try {
+                let api = `http://localhost:3000/turmas/deletar/${id_turma}`;
+                let response = await fetch(api, { method: 'DELETE'})
+                const data = await response.json();
+                setTurmas(data);
+                console.log(data);
+
+            } catch (error) {
+                console.error('Deu ruim: ', error)
+            }
+        }
+
+        fetchData();
+        // const updatedTurmas = turmas.filter(turma => turma.id !== turmasId);
+        // setTurmas(updatedTurmas);
     }
 
     const handleEditar = (turma) => {
@@ -105,7 +119,7 @@ const ListarTurmas = () => {
                             <button className='button-editar' onClick={() => handleEditar(turma)}>
                                 <FaEdit />
                             </button>
-                            <button className='button-excluir' onClick={() => handleExcluir(turma.id)}>
+                            <button className='button-excluir' onClick={() => handleExcluir(turma.id_turma)}>
                                 <FaTrash />
                             </button>
                         </div>

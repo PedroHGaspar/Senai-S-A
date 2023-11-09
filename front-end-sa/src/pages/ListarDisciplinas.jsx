@@ -37,7 +37,7 @@ const ListarDisciplinas = () => {
         fetchData();
 
 
-    }, [])
+    }, [disciplinas])
 
     const [newDisciplina, setNewDisciplina] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -66,9 +66,24 @@ const ListarDisciplinas = () => {
         }
     }
 
-    const handleExcluir = (disciplinaId) => {
-        const updateddisciplinas = disciplinas.filter(disciplina => disciplina.id !== disciplinaId);
-        setDisciplinas(updateddisciplinas);
+    const handleExcluir = (id_discip) => {
+        const fetchData = async () => {
+            try {
+                let api = `http://localhost:3000/disciplina/deletar/${id_discip}`;
+                let response = await fetch(api, { method: 'DELETE'})
+                const data = await response.json();
+                setDisciplinas(data);
+                console.log(data);
+
+            } catch (error) {
+                console.error('Deu ruim: ', error)
+            }
+        }
+
+        fetchData();
+        // const updat
+        // const updateddisciplinas = disciplinas.filter(disciplina => disciplina.id !== disciplinaId);
+        // setDisciplinas(updateddisciplinas);
     }
 
     const handleEditar = (disciplina) => {
@@ -103,7 +118,7 @@ const ListarDisciplinas = () => {
                             <button className='button-editar' onClick={() => handleEditar(disciplina)}>
                                 <FaEdit />
                             </button>
-                            <button className='button-excluir' onClick={() => handleExcluir(disciplina.id)}>
+                            <button className='button-excluir' onClick={() => handleExcluir(disciplina.id_discip)}>
                                 <FaTrash />
                             </button>
                         </div>

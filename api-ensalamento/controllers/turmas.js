@@ -15,18 +15,18 @@ exports.buscarTurmaPeloNome = async (req, res) => {
 exports.adicionarTurma = async (req, res) => {
     const { id_turma, nm_turma, qtd_alunos, num_fase, num_sala } = req.body;
     const turmaNova = await turmas_Facade.adicionarTurma(id_turma, nm_turma, qtd_alunos, num_fase, num_sala)
-    res.status(200).send("Turma Adcionado")
+    console.log("Turma Adcionado")
 }
 
 exports.editarTurma = async (req, res) => {
     const id_turma = req.params.id_turma;
     const { nm_turma, qtd_alunos, num_fase, num_sala } = req.body;
     const turmaEditada = await turmas_Facade.editarTurma(id_turma, nm_turma, qtd_alunos, num_fase, num_sala)
-    res.status(200).send("Turma Editado")
+    console.log("Turma Editado")
 }
 
 exports.deletarTurma = async (req, res) => {
     const deletarTurmaExistente = req.params.id_turma;
     const turmaDeletada = await turmas_Facade.deletarTurma(deletarTurmaExistente)
-    res.status(200).send("Turma Deletado")
+    console.log("Turma Deletado")
 }

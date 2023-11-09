@@ -40,7 +40,7 @@ const Listarsalas = () => {
         fetchData();
 
 
-    }, [])
+    }, [salas])
 
     const [newSalas, setNewSalas] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -69,9 +69,24 @@ const Listarsalas = () => {
         }
     }
 
-    const handleExcluir = (salaId) => {
-        const updatedSalas = salas.filter(sala => sala.id !== salaId);
-        setSalas(updatedSalas);
+    const handleExcluir = (id_sala) => {
+
+        const fetchData = async () => {
+            try {
+                let api = `http://localhost:3000/salas/deletar/${id_sala}`;
+                let response = await fetch(api, { method: 'DELETE'})
+                const data = await response.json();
+                setTurmas(data);
+                console.log(data);
+
+            } catch (error) {
+                console.error('Deu ruim: ', error)
+            }
+        }
+
+        fetchData();
+        // const updatedSalas = salas.filter(sala => sala.id !== salaId);
+        // setSalas(updatedSalas);
     }
 
     const handleEditar = (sala) => {
@@ -106,7 +121,7 @@ const Listarsalas = () => {
                             <button className='button-editar' onClick={() => handleEditar(sala)}>
                                 <FaEdit />
                             </button>
-                            <button className='button-excluir' onClick={() => handleExcluir(sala.id)}>
+                            <button className='button-excluir' onClick={() => handleExcluir(sala.id_sala)}>
                                 <FaTrash />
                             </button>
                         </div>
