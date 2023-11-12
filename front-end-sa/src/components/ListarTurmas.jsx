@@ -1,37 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
 import "../style/listarTurmas.css"
 
 const ListarTurmas = () => {
-    const [turmas, setTurmas] = useState([
-        //Teste:
-        // { id: 1, nome: 'N1' },
-        // { id: 2, nome: 'N2' },
-        // { id: 3, nome: 'N3' },
-        // { id: 4, nome: 'N4' },
-        // { id: 5, nome: 'N5' },
-        // { id: 6, nome: 'N6' },
-    ]);
 
-    const changeFactorRef = useRef(100);
+    const [turmas, setTurmas] = useState([]);
+    const [newTurma, setNewTurma] = useState('');
+    const [newQtdAlunos, setNewQtdAlunos] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedTurmas, setSelectedTurmas] = useState(null);
 
     useEffect(() => {
 
         const fetchData = async () => {
             try {
                 let api = `http://localhost:3000/turmas/lista`;
-
-                // if (pesquisaNome) {
-                //   api += `?name=${pesquisaNome}`
-                // } else if (characterStatus) {
-                //   api += `?status=${characterStatus}`
-                // }
-
                 let response = await fetch(api)
                 const data = await response.json();
                 setTurmas(data);
-                //console.log(data);
+                console.log(data);
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
@@ -39,28 +26,17 @@ const ListarTurmas = () => {
         }
 
         fetchData();
-
-
     }, [])
 
-    const [newTurma, setNewTurma] = useState('');
-    const [newQtdAlunos, setNewQtdAlunos] = useState('');
-
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedTurmas, setSelectedTurmas] = useState(null);
-
-
+    //Modal de cadastro e edição
     const openModal = () => {
         setIsModalOpen(true);
     }
-
     const closeModal = () => {
         setIsModalOpen(false);
         setSelectedTurmas(null);
         setNewTurma('');
         setNewQtdAlunos('');
-        changeFactorRef.current -= 1;
-
     }
 
     const handleNameChange = (e) => {
@@ -69,17 +45,14 @@ const ListarTurmas = () => {
     const handleQtdAlunos = (e) => {
         setNewQtdAlunos(e.target.value);
     }
+
+    //CADASTRO (POST)
     const handleCadastrar = () => {
-
         const fetchData = async () => {
-            console.log(newTurma)
-            console.log(turmas.turmasLista.length)
 
-
+            //Gerador de ID que busca o ID mais alto, e adciona +1
             const idMaisAlto = Math.max(...turmas.turmasLista.map(turma => turma.id_turma));
             let id_creator = idMaisAlto + 1;
-
-            console.log("Id criado: ", id_creator);
 
             if (id_creator <= 99999) {
                 try {
@@ -110,16 +83,10 @@ const ListarTurmas = () => {
 
         fetchData();
         closeModal();
-        // if (newTurma.trim() !== '') {
-        //     const newId = turmas.length + 1;
-        //     setTurmas([...turmas, { id: newId, nome: newTurma }]);
-        //     setNewTurma('');
-        //     closeModal();
-        // }
     }
 
+    //EXCLUSÃO (DELETE)
     const handleExcluir = (id_turma) => {
-        changeFactorRef.current += 1;
 
         const fetchData = async () => {
             try {
@@ -135,10 +102,9 @@ const ListarTurmas = () => {
         }
 
         fetchData();
-        // const updatedTurmas = turmas.filter(turma => turma.id !== turmasId);
-        // setTurmas(updatedTurmas);
     }
 
+    //EDIÇÃO (PUT)
     const handleEditar = (turma) => {
         setSelectedTurmas(turma);
         setNewTurma(turma.nm_turma);
@@ -148,7 +114,6 @@ const ListarTurmas = () => {
 
     const handleSalvarEdicao = (id_turma) => {
 
-        console.log('id_turma:', id_turma);
         const fetchData = async () => {
             try {
                 let api = `http://localhost:3000/turmas/atualizar/${id_turma}`;
@@ -173,18 +138,6 @@ const ListarTurmas = () => {
 
         fetchData();
         closeModal();
-        // if (newTurma.trim() !== '') {
-        //     const updatedTurmas = turmas.map(turma => {
-        //         if (turma.id === selectedTurmas.id) {
-        //             return { ...turma, nome: newTurma };
-        //         }
-        //         return turma;
-        //     });
-        //     setTurmas(updatedTurmas);
-        //     setNewTurma('');
-        //     setSelectedTurmas(null);
-        //     closeModal();
-        // }
     }
 
     return (

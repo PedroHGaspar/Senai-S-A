@@ -3,29 +3,19 @@ import { FaEdit, FaTrash } from 'react-icons/fa';
 import "../style/listarDisciplinas.css"
 
 const ListarDisciplinas = () => {
-    const [disciplinas, setDisciplinas] = useState([
-        //Teste:
-        // { id: 1, nome: 'Teste de Sistemas' },
-        // { id: 2, nome: 'Eletrônica' },
-        // { id: 3, nome: 'Aplicativos' },
-        // { id: 4, nome: 'Banco de Dados' },
-        // { id: 5, nome: 'Fluxograma' },
-    ]);
-    const changeFactorRef = useRef(100);
 
+    const [disciplinas, setDisciplinas] = useState([]);
+    const [newDisciplina, setNewDisciplina] = useState('');
+    const [newQtdDias, setNewQtdDias] = useState('');
+    const [newNumFase, setNewNumFase] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedDisciplinas, setSelectedDisciplinas] = useState(null);
 
     useEffect(() => {
 
         const fetchData = async () => {
             try {
                 let api = `http://localhost:3000/disciplina/lista`;
-
-                // if (pesquisaNome) {
-                //   api += `?name=${pesquisaNome}`
-                // } else if (characterStatus) {
-                //   api += `?status=${characterStatus}`
-                // }
-
                 let response = await fetch(api)
                 const data = await response.json();
                 setDisciplinas(data);
@@ -37,28 +27,18 @@ const ListarDisciplinas = () => {
         }
 
         fetchData();
-
-
     }, [])
 
-    const [newDisciplina, setNewDisciplina] = useState('');
-    const [newQtdDias, setNewQtdDias] = useState('');
-    const [newNumFase, setNewNumFase] = useState('');
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedDisciplinas, setSelectedDisciplinas] = useState(null);
-
+    //Modal de cadastro e edição
     const openModal = () => {
         setIsModalOpen(true);
     }
-
     const closeModal = () => {
         setIsModalOpen(false);
         setSelectedDisciplinas(null);
         setNewDisciplina('');
         setNewQtdDias('');
         setNewNumFase('');
-        changeFactorRef.current -= 1;
-
     }
 
     const handleNameChange = (e) => {
@@ -71,17 +51,13 @@ const ListarDisciplinas = () => {
         setNewNumFase(e.target.value);
     }
 
+    //CADASTRO (POST)
     const handleCadastrar = () => {
-
         const fetchData = async () => {
-            console.log(newDisciplina)
-            console.log(disciplinas.disciplinasLista.length)
 
-
+            //Gerador de ID que busca o ID mais alto, e adciona +1
             const idMaisAlto = Math.max(...disciplinas.disciplinasLista.map(disciplina => disciplina.id_discip));
             let id_creator = idMaisAlto + 1;
-
-            console.log("Id criado: ", id_creator);
 
             if (id_creator <= 99999) {
                 try {
@@ -113,17 +89,10 @@ const ListarDisciplinas = () => {
 
         fetchData();
         closeModal();
-        // if (newDisciplina.trim() !== '') {
-        //     const newId = disciplinas.length + 1;
-        //     setDisciplinas([...disciplinas, { id: newId, nome: newDisciplina }]);
-        //     setNewDisciplina('');
-        //     closeModal();
-        // }
     }
 
+    //EXCLUSÃO (DELETE)
     const handleExcluir = (id_discip) => {
-        changeFactorRef.current += 1;
-
         const fetchData = async () => {
             try {
                 let api = `http://localhost:3000/disciplina/deletar/${id_discip}`;
@@ -138,23 +107,19 @@ const ListarDisciplinas = () => {
         }
 
         fetchData();
-        // const updat
-        // const updateddisciplinas = disciplinas.filter(disciplina => disciplina.id !== disciplinaId);
-        // setDisciplinas(updateddisciplinas);
     }
 
+    //EDIÇÃO (PUT)
     const handleEditar = (disciplina) => {
         setSelectedDisciplinas(disciplina);
         setNewDisciplina(disciplina.nm_disciplina);
         setNewQtdDias(disciplina.qtd_dias);
         setNewNumFase(disciplina.num_fase);
-
         openModal();
     }
 
     const handleSalvarEdicao = (id_discip) => {
 
-        console.log('id_discip:', id_discip);
         const fetchData = async () => {
             try {
                 let api = `http://localhost:3000/disciplina/atualizar/${id_discip}`;
@@ -180,18 +145,6 @@ const ListarDisciplinas = () => {
 
         fetchData();
         closeModal();
-        // if (newDisciplina.trim() !== '') {
-        //     const updateddisciplinas = disciplinas.map(disciplina => {
-        //         if (disciplina.id === selectedDisciplinas.id) {
-        //             return { ...disciplina, nome: newDisciplina };
-        //         }
-        //         return disciplina;
-        //     });
-        //     setDisciplinas(updateddisciplinas);
-        //     setNewDisciplina('');
-        //     setSelectedDisciplinas(null);
-        //     closeModal();
-        // }
     }
 
     return (
@@ -200,7 +153,7 @@ const ListarDisciplinas = () => {
             <ul className='container-lista lista-scroll'>
                 {Object.values(disciplinas.disciplinasLista || {}).map(disciplina => (
                     <li className='lista-disciplinas' key={disciplina.id_discip}>
-                        {disciplina.nm_disciplina}
+                        <p>{disciplina.nm_disciplina}</p>
                         <div className='buttons-lista'>
                             <button className='button-editar' onClick={() => handleEditar(disciplina)}>
                                 <FaEdit />

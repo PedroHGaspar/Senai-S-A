@@ -1,34 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
 import "../style/listarSalas.css"
 
 const Listarsalas = () => {
-    const [salas, setSalas] = useState([
-        //Teste
-        // { id: 1, nome: '400' },
-        // { id: 2, nome: '401' },
-        // { id: 3, nome: '402' },
-        // { id: 4, nome: '403' },
-        // { id: 5, nome: '404' },
-        // { id: 6, nome: '405' },
-        // { id: 7, nome: '406' },
-    ]);
 
-    const changeFactorRef = useRef(100);
+    const [salas, setSalas] = useState([]);
+    const [newSalas, setNewSalas] = useState('');
+    const [newQtdMax, setNewQtdMax] = useState('');
+    const [newTipo, setNewTipo] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedSalas, setSelectedSalas] = useState(null);
 
     useEffect(() => {
 
         const fetchData = async () => {
             try {
                 let api = `http://localhost:3000/salas/lista`;
-
-                // if (pesquisaNome) {
-                //   api += `?name=${pesquisaNome}`
-                // } else if (characterStatus) {
-                //   api += `?status=${characterStatus}`
-                // }
-
                 let response = await fetch(api)
                 const data = await response.json();
                 setSalas(data);
@@ -40,28 +27,18 @@ const Listarsalas = () => {
         }
 
         fetchData();
-
-
     }, [])
 
-    const [newSalas, setNewSalas] = useState('');
-    const [newQtdMax, setNewQtdMax] = useState('');
-    const [newTipo, setNewTipo] = useState('');
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedSalas, setSelectedSalas] = useState(null);
-
+    //Modal de cadastro e edição
     const openModal = () => {
         setIsModalOpen(true);
     }
-
     const closeModal = () => {
         setIsModalOpen(false);
         setSelectedSalas(null);
         setNewSalas('');
         setNewQtdMax('');
         setNewTipo('');
-        changeFactorRef.current -= 1;
-
     }
 
     const handleNameChange = (e) => {
@@ -74,16 +51,13 @@ const Listarsalas = () => {
         setNewTipo(e.target.value);
     }
 
+    //CADASTRO (POST)
     const handleCadastrar = () => {
         const fetchData = async () => {
-            console.log(newSalas)
-            console.log(salas.salasLista.length)
 
-
+            //Gerador de ID que busca o ID mais alto, e adciona +1
             const idMaisAlto = Math.max(...salas.salasLista.map(sala => sala.id_sala));
             let id_creator = idMaisAlto + 1;
-
-            console.log("Id criado: ", id_creator);
 
             if (id_creator <= 99999) {
                 try {
@@ -115,16 +89,10 @@ const Listarsalas = () => {
 
         fetchData();
         closeModal();
-        // if (newSalas.trim() !== '') {
-        //     const newId = salas.length + 1;
-        //     setSalas([...salas, { id: newId, nome: newSalas }]);
-        //     setNewSalas('');
-        //     closeModal();
-        // }
     }
 
+    //EXCLUSÃO (DELETE)
     const handleExcluir = (id_sala) => {
-        changeFactorRef.current += 1;
 
         const fetchData = async () => {
             try {
@@ -140,22 +108,19 @@ const Listarsalas = () => {
         }
 
         fetchData();
-        // const updatedSalas = salas.filter(sala => sala.id !== salaId);
-        // setSalas(updatedSalas);
     }
 
+    //EDIÇÃO (PUT)
     const handleEditar = (sala) => {
         setSelectedSalas(sala);
         setNewSalas(sala.num_sala);
         setNewQtdMax(sala.qtd_maxima);
         setNewTipo(sala.tipo);
-
         openModal();
     }
 
     const handleSalvarEdicao = (id_sala) => {
 
-        console.log('id_sala:', id_sala);
         const fetchData = async () => {
             try {
                 let api = `http://localhost:3000/salas/atualizar/${id_sala}`;
@@ -181,18 +146,6 @@ const Listarsalas = () => {
 
         fetchData();
         closeModal();
-        // if (newSalas.trim() !== '') {
-        //     const updatedSalas = salas.map(sala => {
-        //         if (sala.id === selectedSalas.id) {
-        //             return { ...sala, nome: newSalas };
-        //         }
-        //         return sala;
-        //     });
-        //     setSalas(updatedSalas);
-        //     setNewSalas('');
-        //     setSelectedSalas(null);
-        //     closeModal();
-        // }
     }
 
     return (
