@@ -41,8 +41,10 @@ const Listarsalas = () => {
 
 
     }, [salas])
-
+    
     const [newSalas, setNewSalas] = useState('');
+    const [newQtdMax, setNewQtdMax] = useState('');
+    const [newTipo, setNewTipo] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedSalas, setSelectedSalas] = useState(null);
 
@@ -54,19 +56,61 @@ const Listarsalas = () => {
         setIsModalOpen(false);
         setSelectedSalas(null);
         setNewSalas('');
+        setNewQtdMax('');
+        setNewTipo('');
     }
 
     const handleNameChange = (e) => {
         setNewSalas(e.target.value);
     }
+    const handleQtdMax = (e) => {
+        setNewQtdMax(e.target.value);
+    }
+    const handleTipo = (e) => {
+        setNewTipo(e.target.value);
+    }
 
     const handleCadastrar = () => {
-        if (newSalas.trim() !== '') {
-            const newId = salas.length + 1;
-            setSalas([...salas, { id: newId, nome: newSalas }]);
-            setNewSalas('');
-            closeModal();
+        const fetchData = async () => {
+            console.log(newSalas)
+            console.log(salas.salasLista.length)
+
+
+            //We have to make this dont duplicate you know
+            let id_creator = salas.salasLista.length + 2
+
+            try {
+                let api = `http://localhost:3000/salas/postar`;
+                let response = await fetch(api, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        "id_sala": id_creator,
+                        "num_sala": newSalas,
+                        "qtd_maxima": newQtdMax,
+                        "tipo": `${newTipo}`
+                    }),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+                const data = await response.json();
+                setSalas(data);
+                console.log(data);
+                console.log(newSalas)
+
+            } catch (error) {
+                console.error('Deu ruim: ', error)
+            }
         }
+
+        fetchData();
+        closeModal();
+        // if (newSalas.trim() !== '') {
+        //     const newId = salas.length + 1;
+        //     setSalas([...salas, { id: newId, nome: newSalas }]);
+        //     setNewSalas('');
+        //     closeModal();
+        // }
     }
 
     const handleExcluir = (id_sala) => {
@@ -74,7 +118,7 @@ const Listarsalas = () => {
         const fetchData = async () => {
             try {
                 let api = `http://localhost:3000/salas/deletar/${id_sala}`;
-                let response = await fetch(api, { method: 'DELETE'})
+                let response = await fetch(api, { method: 'DELETE' })
                 const data = await response.json();
                 setTurmas(data);
                 console.log(data);
@@ -140,6 +184,18 @@ const Listarsalas = () => {
                             placeholder="Nome"
                             value={newSalas}
                             onChange={handleNameChange}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Quantidade máxima de alunos"
+                            value={newQtdMax}
+                            onChange={handleQtdMax}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Tipo de sala"
+                            value={newTipo}
+                            onChange={handleTipo}
                         />
                         <button onClick={selectedSalas ? handleSalvarEdicao : handleCadastrar}>
                             {selectedSalas ? 'Salvar' : 'Cadastrar'}

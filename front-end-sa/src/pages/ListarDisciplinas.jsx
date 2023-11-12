@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import "../style/listarDisciplinas.css"
 
@@ -40,6 +40,8 @@ const ListarDisciplinas = () => {
     }, [disciplinas])
 
     const [newDisciplina, setNewDisciplina] = useState('');
+    const [newQtdDias, setNewQtdDias] = useState('');
+    const [newNumFase, setNewNumFase] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedDisciplinas, setSelectedDisciplinas] = useState(null);
 
@@ -51,26 +53,70 @@ const ListarDisciplinas = () => {
         setIsModalOpen(false);
         setSelectedDisciplinas(null);
         setNewDisciplina('');
+        setNewQtdDias('');
+        setNewNumFase('');
     }
 
     const handleNameChange = (e) => {
         setNewDisciplina(e.target.value);
     }
+    const handleQtdDias = (e) => {
+        setNewQtdDias(e.target.value);
+    }
+    const handleNumFase = (e) => {
+        setNewNumFase(e.target.value);
+    }
 
     const handleCadastrar = () => {
-        if (newDisciplina.trim() !== '') {
-            const newId = disciplinas.length + 1;
-            setDisciplinas([...disciplinas, { id: newId, nome: newDisciplina }]);
-            setNewDisciplina('');
-            closeModal();
+
+        const fetchData = async () => {
+            console.log(newDisciplina)
+            console.log(disciplinas.disciplinasLista.length)
+
+
+            //We have to make this dont duplicate you know
+            let id_creator = disciplinas.disciplinasLista.length + 2
+            
+
+            try {
+                let api = `http://localhost:3000/disciplina/postar`;
+                let response = await fetch(api, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        "id_discip": id_creator,
+                        "nm_disciplina": `${newDisciplina}`,
+                        "qtd_dias": newQtdDias,
+                        "num_fase": newNumFase
+                    }),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+                const data = await response.json();
+                setDisciplinas(data);
+                console.log(data);
+                console.log(newDisp)
+
+            } catch (error) {
+                console.error('Deu ruim: ', error)
+            }
         }
+
+        fetchData();
+        closeModal();
+        // if (newDisciplina.trim() !== '') {
+        //     const newId = disciplinas.length + 1;
+        //     setDisciplinas([...disciplinas, { id: newId, nome: newDisciplina }]);
+        //     setNewDisciplina('');
+        //     closeModal();
+        // }
     }
 
     const handleExcluir = (id_discip) => {
         const fetchData = async () => {
             try {
                 let api = `http://localhost:3000/disciplina/deletar/${id_discip}`;
-                let response = await fetch(api, { method: 'DELETE'})
+                let response = await fetch(api, { method: 'DELETE' })
                 const data = await response.json();
                 setDisciplinas(data);
                 console.log(data);
@@ -137,6 +183,18 @@ const ListarDisciplinas = () => {
                             placeholder="Nome"
                             value={newDisciplina}
                             onChange={handleNameChange}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Quantidade de dias"
+                            value={newQtdDias}
+                            onChange={handleQtdDias}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Número da Fase"
+                            value={newNumFase}
+                            onChange={handleNumFase}
                         />
                         <button onClick={selectedDisciplinas ? handleSalvarEdicao : handleCadastrar}>
                             {selectedDisciplinas ? 'Salvar' : 'Cadastrar'}

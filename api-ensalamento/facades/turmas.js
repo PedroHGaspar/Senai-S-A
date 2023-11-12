@@ -32,10 +32,10 @@ module.exports = class TurmasFacade {
         }
     }
 
-    async adicionarTurma(id_turma, nm_turma, qtd_alunos, num_fase, num_sala) {
+    async adicionarTurma(id_turma, nm_turma, qtd_alunos) {
         try {
-            const comando = "INSERT INTO TURMA(id_turma, nm_turma, qtd_alunos, num_fase, num_sala) values ($1, $2, $3, $4, $5);";
-            const resultado = await this.client.query(comando, [id_turma, nm_turma, qtd_alunos, num_fase, num_sala]);
+            const comando = "INSERT INTO TURMA(id_turma, nm_turma, qtd_alunos) values ($1, $2, $3);";
+            const resultado = await this.client.query(comando, [id_turma, nm_turma, qtd_alunos]);
             return resultado.rows;
         } catch (erro) {
             console.error(erro);
@@ -44,10 +44,10 @@ module.exports = class TurmasFacade {
     }
     
 
-    async editarTurma(id_turma, nm_turma, qtd_alunos, num_fase, num_sala) {
+    async editarTurma(id_turma, nm_turma, qtd_alunos) {
         try {
-            const comando = "UPDATE TURMA SET nm_turma=$2, qtd_alunos=$3, num_fase=$4, num_sala=$5 WHERE id_turma=$1;";
-            const resultado = await this.client.query(comando,[id_turma, nm_turma, qtd_alunos, num_fase, num_sala] )
+            const comando = "UPDATE TURMA SET nm_turma=$2, qtd_alunos=$3 WHERE id_turma=$1;";
+            const resultado = await this.client.query(comando,[id_turma, nm_turma, qtd_alunos] )
             return resultado.rows;
 
         } catch (erro) {

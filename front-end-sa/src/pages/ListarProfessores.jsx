@@ -39,7 +39,7 @@ const ListarProfessores = () => {
         fetchData();
 
 
-    }, [professores])
+    }, [])
 
     const [newProfessorName, setNewProfessorName] = useState('');
     const [newDisp, setNewDisp] = useState('');
@@ -64,41 +64,39 @@ const ListarProfessores = () => {
     const handleDispChange = (e) => {
         setNewDisp(e.target.value)
     }
-    
+
 
     const handleCadastrar = () => {
-        
-        //We have to make this dont duplicate you know
-        let id_creator = professores.professoresLista.length + 1
-        
         const fetchData = async () => {
             console.log(newDisp)
             console.log(newProfessorName)
             console.log(professores.professoresLista.length)
 
-            
+
+            //We have to make this dont duplicate you know
+            let id_creator = professores.professoresLista.length + 1
 
             try {
                 let api = `http://localhost:3000/professores/postar`;
-                let response = await fetch(api, { method: 'POST',
-                body: JSON.stringify({
-                    "id_prof": id_creator,
-                    "nome":`${newProfessorName}`,
-                    "disp_semana":`${newDisp}`
-                }),
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                }
-            })
+                let response = await fetch(api, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        "id_prof": id_creator,
+                        "nome": `${newProfessorName}`,
+                        "disp_semana": `${newDisp}`
+                    }),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
                 const data = await response.json();
                 setProfessores(data);
                 console.log(data);
                 console.log(newDisp)
-                 console.log(newProfessorName)
+                console.log(newProfessorName)
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
-                fetchData();
             }
         }
 
@@ -118,7 +116,7 @@ const ListarProfessores = () => {
         const fetchData = async () => {
             try {
                 let api = `http://localhost:3000/professores/deletar/${id_prof}`;
-                let response = await fetch(api, { method: 'DELETE'})
+                let response = await fetch(api, { method: 'DELETE' })
                 const data = await response.json();
                 setProfessores(data);
                 console.log(data);

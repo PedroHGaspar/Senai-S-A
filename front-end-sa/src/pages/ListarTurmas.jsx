@@ -39,11 +39,14 @@ const ListarTurmas = () => {
         fetchData();
 
 
-    }, [turmas])
+    }, [])
 
     const [newTurma, setNewTurma] = useState('');
+    const [newQtdAlunos, setNewQtdAlunos] = useState('');
+
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTurmas, setSelectedTurmas] = useState(null);
+
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -53,19 +56,56 @@ const ListarTurmas = () => {
         setIsModalOpen(false);
         setSelectedTurmas(null);
         setNewTurma('');
+        setNewQtdAlunos('');
     }
 
     const handleNameChange = (e) => {
         setNewTurma(e.target.value);
     }
-
+    const handleQtdAlunos = (e) => {
+        setNewQtdAlunos(e.target.value);
+    }
     const handleCadastrar = () => {
-        if (newTurma.trim() !== '') {
-            const newId = turmas.length + 1;
-            setTurmas([...turmas, { id: newId, nome: newTurma }]);
-            setNewTurma('');
-            closeModal();
+
+        const fetchData = async () => {
+            console.log(newTurma)
+            console.log(turmas.turmasLista.length)
+
+
+            //We have to make this dont duplicate you know
+            let id_creator = turmas.turmasLista.length + 2
+
+            try {
+                let api = `http://localhost:3000/turmas/postar`;
+                let response = await fetch(api, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        "id_turma": id_creator,
+                        "nm_turma": `${newTurma}`,
+                        "qtd_alunos":newQtdAlunos
+                    }),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+                const data = await response.json();
+                setTurmas(data);
+                console.log(data);
+                console.log(newTurma)
+
+            } catch (error) {
+                console.error('Deu ruim: ', error)
+            }
         }
+
+        fetchData();
+        closeModal();
+        // if (newTurma.trim() !== '') {
+        //     const newId = turmas.length + 1;
+        //     setTurmas([...turmas, { id: newId, nome: newTurma }]);
+        //     setNewTurma('');
+        //     closeModal();
+        // }
     }
 
     const handleExcluir = (id_turma) => {
@@ -139,6 +179,13 @@ const ListarTurmas = () => {
                             value={newTurma}
                             onChange={handleNameChange}
                         />
+                        <input
+                            type="text"
+                            placeholder="Quantidades de alunos"
+                            value={newQtdAlunos}
+                            onChange={handleQtdAlunos}
+                        />
+                        
                         <button onClick={selectedTurmas ? handleSalvarEdicao : handleCadastrar}>
                             {selectedTurmas ? 'Salvar' : 'Cadastrar'}
                         </button>
