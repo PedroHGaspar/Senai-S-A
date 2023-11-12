@@ -27,7 +27,7 @@ const ListarDisciplinas = () => {
                 let response = await fetch(api)
                 const data = await response.json();
                 setDisciplinas(data);
-                console.log(data);
+                //console.log(data);
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
@@ -134,23 +134,49 @@ const ListarDisciplinas = () => {
 
     const handleEditar = (disciplina) => {
         setSelectedDisciplinas(disciplina);
-        setNewDisciplina(disciplina.nome);
         openModal();
     }
 
-    const handleSalvarEdicao = () => {
-        if (newDisciplina.trim() !== '') {
-            const updateddisciplinas = disciplinas.map(disciplina => {
-                if (disciplina.id === selectedDisciplinas.id) {
-                    return { ...disciplina, nome: newDisciplina };
-                }
-                return disciplina;
-            });
-            setDisciplinas(updateddisciplinas);
-            setNewDisciplina('');
-            setSelectedDisciplinas(null);
-            closeModal();
+    const handleSalvarEdicao = (id_discip) => {
+
+        console.log('id_discip:', id_discip);
+        const fetchData = async () => {
+            try {
+                let api = `http://localhost:3000/disciplina/atualizar/${id_discip}`;
+                let response = await fetch(api, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        "nm_disciplina": `${newDisciplina}`,
+                        "qtd_dias": newQtdDias,
+                        "num_fase": newNumFase
+                    }),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+                const data = await response.json();
+                setSalas(data);
+                console.log(data);
+
+            } catch (error) {
+                console.error('Deu ruim: ', error)
+            }
         }
+
+        fetchData();
+        closeModal();
+        // if (newDisciplina.trim() !== '') {
+        //     const updateddisciplinas = disciplinas.map(disciplina => {
+        //         if (disciplina.id === selectedDisciplinas.id) {
+        //             return { ...disciplina, nome: newDisciplina };
+        //         }
+        //         return disciplina;
+        //     });
+        //     setDisciplinas(updateddisciplinas);
+        //     setNewDisciplina('');
+        //     setSelectedDisciplinas(null);
+        //     closeModal();
+        // }
     }
 
     return (
@@ -196,7 +222,7 @@ const ListarDisciplinas = () => {
                             value={newNumFase}
                             onChange={handleNumFase}
                         />
-                        <button onClick={selectedDisciplinas ? handleSalvarEdicao : handleCadastrar}>
+                        <button onClick={selectedDisciplinas ? () => handleSalvarEdicao(selectedDisciplinas.id_discip) : handleCadastrar}>
                             {selectedDisciplinas ? 'Salvar' : 'Cadastrar'}
                         </button>
                         <button onClick={closeModal}>Fechar Modal</button>

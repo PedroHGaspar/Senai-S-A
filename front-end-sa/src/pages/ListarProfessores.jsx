@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import "../style/listarProfessores.css"
@@ -12,6 +12,7 @@ const ListarProfessores = () => {
         // { id: 4, nome: 'Eric - O Mais Temível' },
         // { id: 5, nome: 'Enzo - O Mais Poderoso' },
     ]);
+    const changeFactorRef = useRef(100);
 
 
     useEffect(() => {
@@ -39,12 +40,13 @@ const ListarProfessores = () => {
         fetchData();
 
 
-    }, [])
+    }, [changeFactorRef.current])
 
     const [newProfessorName, setNewProfessorName] = useState('');
     const [newDisp, setNewDisp] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProfessor, setSelectedProfessor] = useState(null);
+
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -55,7 +57,7 @@ const ListarProfessores = () => {
         setSelectedProfessor(null);
         setNewProfessorName('');
         setNewDisp('')
-
+        changeFactorRef.current -= 1;
     }
 
     const handleNameChange = (e) => {
@@ -74,7 +76,7 @@ const ListarProfessores = () => {
 
 
             //We have to make this dont duplicate you know
-            let id_creator = professores.professoresLista.length + 1
+            let id_creator = professores.professoresLista.length + 2
 
             try {
                 let api = `http://localhost:3000/professores/postar`;
@@ -113,6 +115,7 @@ const ListarProfessores = () => {
     }
 
     const handleExcluir = (id_prof) => {
+        changeFactorRef.current += 1;
         const fetchData = async () => {
             try {
                 let api = `http://localhost:3000/professores/deletar/${id_prof}`;
@@ -127,30 +130,60 @@ const ListarProfessores = () => {
         }
 
         fetchData();
+
         // const updatedProfessores = professores.filter(professor => professor.id !== professorId);
         // setProfessores(updatedProfessores);
     }
 
     const handleEditar = (professor) => {
         setSelectedProfessor(professor);
-        setNewProfessorName(professor.nome);
         openModal();
     }
 
-    const handleSalvarEdicao = () => {
-        if (newProfessorName.trim() !== '') {
-            const updatedProfessores = professores.map(professor => {
-                if (professor.id === selectedProfessor.id) {
-                    return { ...professor, nome: newProfessorName, disp_semana: newDisp };
-                }
-                return professor;
-            });
-            setProfessores(updatedProfessores);
-            setNewProfessorName('');
-            setNewDisp('')
-            setSelectedProfessor(null);
-            closeModal();
+
+
+
+    const handleSalvarEdicao = (id_prof) => {
+
+        console.log('id_prof:', id_prof);
+        const fetchData = async () => {
+            try {
+                let api = `http://localhost:3000/professores/atualizar/${id_prof}`;
+                let response = await fetch(api, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        "nome": `${newProfessorName}`,
+                        "disp_semana": `${newDisp}`
+                    }),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+                const data = await response.json();
+                setProfessores(data);
+                console.log(data);
+
+            } catch (error) {
+                console.error('Deu ruim: ', error)
+            }
         }
+
+        fetchData();
+        closeModal();
+
+        // if (newProfessorName.trim() !== '') {
+        //     const updatedProfessores = professores.map(professor => {
+        //         if (professor.id === selectedProfessor.id) {
+        //             return { ...professor, nome: newProfessorName, disp_semana: newDisp };
+        //         }
+        //         return professor;
+        //     });
+        //     setProfessores(updatedProfessores);
+        //     setNewProfessorName('');
+        //     setNewDisp('')
+        //     setSelectedProfessor(null);
+        //     closeModal();
+        // }
     }
 
     return (
@@ -191,9 +224,10 @@ const ListarProfessores = () => {
                             value={newDisp}
                             onChange={handleDispChange}
                         />
-                        <button onClick={selectedProfessor ? handleSalvarEdicao : handleCadastrar}>
+                        <button onClick={selectedProfessor ? () => handleSalvarEdicao(selectedProfessor.id_prof) : handleCadastrar}>
                             {selectedProfessor ? 'Salvar' : 'Cadastrar'}
                         </button>
+
                         <button onClick={closeModal}>Fechar Modal</button>
                     </div>
                 </div>

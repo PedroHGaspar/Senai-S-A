@@ -30,7 +30,6 @@ const Listarsalas = () => {
                 let response = await fetch(api)
                 const data = await response.json();
                 setSalas(data);
-                console.log(data);
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
@@ -135,23 +134,49 @@ const Listarsalas = () => {
 
     const handleEditar = (sala) => {
         setSelectedSalas(sala);
-        setNewSalas(sala.nome);
         openModal();
     }
 
-    const handleSalvarEdicao = () => {
-        if (newSalas.trim() !== '') {
-            const updatedSalas = salas.map(sala => {
-                if (sala.id === selectedSalas.id) {
-                    return { ...sala, nome: newSalas };
-                }
-                return sala;
-            });
-            setSalas(updatedSalas);
-            setNewSalas('');
-            setSelectedSalas(null);
-            closeModal();
+    const handleSalvarEdicao = (id_sala) => {
+
+        console.log('id_sala:', id_sala);
+        const fetchData = async () => {
+            try {
+                let api = `http://localhost:3000/salas/atualizar/${id_sala}`;
+                let response = await fetch(api, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        "num_sala": newSalas,
+                        "qtd_maxima": newQtdMax,
+                        "tipo": `${newTipo}`
+                    }),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+                const data = await response.json();
+                setSalas(data);
+                console.log(data);
+
+            } catch (error) {
+                console.error('Deu ruim: ', error)
+            }
         }
+
+        fetchData();
+        closeModal();
+        // if (newSalas.trim() !== '') {
+        //     const updatedSalas = salas.map(sala => {
+        //         if (sala.id === selectedSalas.id) {
+        //             return { ...sala, nome: newSalas };
+        //         }
+        //         return sala;
+        //     });
+        //     setSalas(updatedSalas);
+        //     setNewSalas('');
+        //     setSelectedSalas(null);
+        //     closeModal();
+        // }
     }
 
     return (
@@ -197,7 +222,7 @@ const Listarsalas = () => {
                             value={newTipo}
                             onChange={handleTipo}
                         />
-                        <button onClick={selectedSalas ? handleSalvarEdicao : handleCadastrar}>
+                        <button onClick={selectedSalas ? () => handleSalvarEdicao(selectedSalas.id_sala) : handleCadastrar}>
                             {selectedSalas ? 'Salvar' : 'Cadastrar'}
                         </button>
                         <button onClick={closeModal}>Fechar Modal</button>

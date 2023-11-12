@@ -29,7 +29,7 @@ const ListarTurmas = () => {
                 let response = await fetch(api)
                 const data = await response.json();
                 setTurmas(data);
-                console.log(data);
+                //console.log(data);
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
@@ -39,7 +39,7 @@ const ListarTurmas = () => {
         fetchData();
 
 
-    }, [])
+    }, [turmas])
 
     const [newTurma, setNewTurma] = useState('');
     const [newQtdAlunos, setNewQtdAlunos] = useState('');
@@ -129,23 +129,48 @@ const ListarTurmas = () => {
 
     const handleEditar = (turma) => {
         setSelectedTurmas(turma);
-        setNewTurma(turma.nome);
         openModal();
     }
 
-    const handleSalvarEdicao = () => {
-        if (newTurma.trim() !== '') {
-            const updatedTurmas = turmas.map(turma => {
-                if (turma.id === selectedTurmas.id) {
-                    return { ...turma, nome: newTurma };
-                }
-                return turma;
-            });
-            setTurmas(updatedTurmas);
-            setNewTurma('');
-            setSelectedTurmas(null);
-            closeModal();
+    const handleSalvarEdicao = (id_turma) => {
+
+        console.log('id_turma:', id_turma);
+        const fetchData = async () => {
+            try {
+                let api = `http://localhost:3000/turmas/atualizar/${id_turma}`;
+                let response = await fetch(api, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        "nm_turma": `${newTurma}`,
+                        "qtd_alunos":newQtdAlunos
+                    }),
+                    headers: {
+                        "Content-type": "application/json; charset=UTF-8"
+                    }
+                })
+                const data = await response.json();
+                setTurmas(data);
+                console.log(data);
+
+            } catch (error) {
+                console.error('Deu ruim: ', error)
+            }
         }
+
+        fetchData();
+        closeModal();
+        // if (newTurma.trim() !== '') {
+        //     const updatedTurmas = turmas.map(turma => {
+        //         if (turma.id === selectedTurmas.id) {
+        //             return { ...turma, nome: newTurma };
+        //         }
+        //         return turma;
+        //     });
+        //     setTurmas(updatedTurmas);
+        //     setNewTurma('');
+        //     setSelectedTurmas(null);
+        //     closeModal();
+        // }
     }
 
     return (
@@ -186,7 +211,7 @@ const ListarTurmas = () => {
                             onChange={handleQtdAlunos}
                         />
                         
-                        <button onClick={selectedTurmas ? handleSalvarEdicao : handleCadastrar}>
+                        <button onClick={selectedTurmas ? () => handleSalvarEdicao(selectedTurmas.id_turma) : handleCadastrar}>
                             {selectedTurmas ? 'Salvar' : 'Cadastrar'}
                         </button>
                         <button onClick={closeModal}>Fechar Modal</button>
