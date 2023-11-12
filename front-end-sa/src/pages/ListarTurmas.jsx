@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import "../style/listarTurmas.css"
@@ -13,6 +13,8 @@ const ListarTurmas = () => {
         // { id: 5, nome: 'N5' },
         // { id: 6, nome: 'N6' },
     ]);
+
+    const changeFactorRef = useRef(100);
 
     useEffect(() => {
 
@@ -39,7 +41,7 @@ const ListarTurmas = () => {
         fetchData();
 
 
-    }, [turmas])
+    }, [])
 
     const [newTurma, setNewTurma] = useState('');
     const [newQtdAlunos, setNewQtdAlunos] = useState('');
@@ -57,6 +59,8 @@ const ListarTurmas = () => {
         setSelectedTurmas(null);
         setNewTurma('');
         setNewQtdAlunos('');
+        changeFactorRef.current -= 1;
+
     }
 
     const handleNameChange = (e) => {
@@ -72,29 +76,35 @@ const ListarTurmas = () => {
             console.log(turmas.turmasLista.length)
 
 
-            //We have to make this dont duplicate you know
-            let id_creator = turmas.turmasLista.length + 2
+            const idMaisAlto = Math.max(...turmas.turmasLista.map(turma => turma.id_turma));
+            let id_creator = idMaisAlto + 1;
 
-            try {
-                let api = `http://localhost:3000/turmas/postar`;
-                let response = await fetch(api, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        "id_turma": id_creator,
-                        "nm_turma": `${newTurma}`,
-                        "qtd_alunos":newQtdAlunos
-                    }),
-                    headers: {
-                        "Content-type": "application/json; charset=UTF-8"
-                    }
-                })
-                const data = await response.json();
-                setTurmas(data);
-                console.log(data);
-                console.log(newTurma)
+            console.log("Id criado: ", id_creator);
 
-            } catch (error) {
-                console.error('Deu ruim: ', error)
+            if (id_creator <= 99999) {
+                try {
+                    let api = `http://localhost:3000/turmas/postar`;
+                    let response = await fetch(api, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            "id_turma": id_creator,
+                            "nm_turma": `${newTurma}`,
+                            "qtd_alunos": newQtdAlunos
+                        }),
+                        headers: {
+                            "Content-type": "application/json; charset=UTF-8"
+                        }
+                    })
+                    const data = await response.json();
+                    setTurmas(data);
+                    console.log(data);
+                    console.log(newTurma)
+
+                } catch (error) {
+                    console.error('Deu ruim: ', error)
+                }
+            } else {
+                console.error('Unable to find a unique ID within the 5-digit limit.');
             }
         }
 
@@ -109,10 +119,12 @@ const ListarTurmas = () => {
     }
 
     const handleExcluir = (id_turma) => {
+        changeFactorRef.current += 1;
+
         const fetchData = async () => {
             try {
                 let api = `http://localhost:3000/turmas/deletar/${id_turma}`;
-                let response = await fetch(api, { method: 'DELETE'})
+                let response = await fetch(api, { method: 'DELETE' })
                 const data = await response.json();
                 setTurmas(data);
                 console.log(data);
@@ -129,6 +141,8 @@ const ListarTurmas = () => {
 
     const handleEditar = (turma) => {
         setSelectedTurmas(turma);
+        setNewTurma(turma.nm_turma);
+        setNewQtdAlunos(turma.qtd_alunos)
         openModal();
     }
 
@@ -142,7 +156,7 @@ const ListarTurmas = () => {
                     method: 'PUT',
                     body: JSON.stringify({
                         "nm_turma": `${newTurma}`,
-                        "qtd_alunos":newQtdAlunos
+                        "qtd_alunos": newQtdAlunos
                     }),
                     headers: {
                         "Content-type": "application/json; charset=UTF-8"
@@ -210,7 +224,7 @@ const ListarTurmas = () => {
                             value={newQtdAlunos}
                             onChange={handleQtdAlunos}
                         />
-                        
+
                         <button onClick={selectedTurmas ? () => handleSalvarEdicao(selectedTurmas.id_turma) : handleCadastrar}>
                             {selectedTurmas ? 'Salvar' : 'Cadastrar'}
                         </button>

@@ -40,7 +40,7 @@ const ListarProfessores = () => {
         fetchData();
 
 
-    }, [changeFactorRef.current])
+    }, [])
 
     const [newProfessorName, setNewProfessorName] = useState('');
     const [newDisp, setNewDisp] = useState('');
@@ -70,49 +70,47 @@ const ListarProfessores = () => {
 
     const handleCadastrar = () => {
         const fetchData = async () => {
-            console.log(newDisp)
-            console.log(newProfessorName)
-            console.log(professores.professoresLista.length)
+            console.log(newDisp);
+            console.log(newProfessorName);
+            console.log(professores.professoresLista.length);
+    
+            const idMaisAlto = Math.max(...professores.professoresLista.map(professor => professor.id_prof));
+            let id_creator = idMaisAlto + 1;
 
+            console.log("Id criado: ",id_creator);
 
-            //We have to make this dont duplicate you know
-            let id_creator = professores.professoresLista.length + 2
-
-            try {
-                let api = `http://localhost:3000/professores/postar`;
-                let response = await fetch(api, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        "id_prof": id_creator,
-                        "nome": `${newProfessorName}`,
-                        "disp_semana": `${newDisp}`
-                    }),
-                    headers: {
-                        "Content-type": "application/json; charset=UTF-8"
-                    }
-                })
-                const data = await response.json();
-                setProfessores(data);
-                console.log(data);
-                console.log(newDisp)
-                console.log(newProfessorName)
-
-            } catch (error) {
-                console.error('Deu ruim: ', error)
+            if (id_creator <= 99999) {
+                try {
+                    let api = `http://localhost:3000/professores/postar`;
+                    let response = await fetch(api, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            id_prof: id_creator,
+                            nome: `${newProfessorName}`,
+                            disp_semana: `${newDisp}`
+                        }),
+                        headers: {
+                            'Content-type': 'application/json; charset=UTF-8'
+                        }
+                    });
+                    const data = await response.json();
+                    setProfessores(data);
+                    console.log(data);
+                    console.log(newDisp);
+                    console.log(newProfessorName);
+                } catch (error) {
+                    console.error('Deu ruim: ', error);
+                }
+            } else {
+                console.error('Unable to find a unique ID within the 5-digit limit.');
             }
-        }
-
+        };
+    
         fetchData();
         closeModal();
+    };
 
-        // if (newProfessorName.trim() !== '') {
-        //     const newId = professores.length + 1;
-        //     setProfessores([...professores, { id: newId, nome: newProfessorName, disp_semana: newDisp  }]);
-        //     setNewProfessorName('');
-        //     setNewDisp('')
-        //     closeModal();
-        // }
-    }
+
 
     const handleExcluir = (id_prof) => {
         changeFactorRef.current += 1;
@@ -137,6 +135,8 @@ const ListarProfessores = () => {
 
     const handleEditar = (professor) => {
         setSelectedProfessor(professor);
+        setNewProfessorName(professor.nome);
+        setNewDisp(professor.disp_semana)
         openModal();
     }
 

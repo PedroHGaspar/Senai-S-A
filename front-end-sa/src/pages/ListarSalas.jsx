@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import "../style/listarSalas.css"
@@ -15,6 +15,8 @@ const Listarsalas = () => {
         // { id: 7, nome: '406' },
     ]);
 
+    const changeFactorRef = useRef(100);
+
     useEffect(() => {
 
         const fetchData = async () => {
@@ -30,6 +32,7 @@ const Listarsalas = () => {
                 let response = await fetch(api)
                 const data = await response.json();
                 setSalas(data);
+                console.log(data)
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
@@ -39,8 +42,8 @@ const Listarsalas = () => {
         fetchData();
 
 
-    }, [salas])
-    
+    }, [])
+
     const [newSalas, setNewSalas] = useState('');
     const [newQtdMax, setNewQtdMax] = useState('');
     const [newTipo, setNewTipo] = useState('');
@@ -57,6 +60,8 @@ const Listarsalas = () => {
         setNewSalas('');
         setNewQtdMax('');
         setNewTipo('');
+        changeFactorRef.current -= 1;
+
     }
 
     const handleNameChange = (e) => {
@@ -75,30 +80,36 @@ const Listarsalas = () => {
             console.log(salas.salasLista.length)
 
 
-            //We have to make this dont duplicate you know
-            let id_creator = salas.salasLista.length + 2
+            const idMaisAlto = Math.max(...salas.salasLista.map(sala => sala.id_sala));
+            let id_creator = idMaisAlto + 1;
 
-            try {
-                let api = `http://localhost:3000/salas/postar`;
-                let response = await fetch(api, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        "id_sala": id_creator,
-                        "num_sala": newSalas,
-                        "qtd_maxima": newQtdMax,
-                        "tipo": `${newTipo}`
-                    }),
-                    headers: {
-                        "Content-type": "application/json; charset=UTF-8"
-                    }
-                })
-                const data = await response.json();
-                setSalas(data);
-                console.log(data);
-                console.log(newSalas)
+            console.log("Id criado: ", id_creator);
 
-            } catch (error) {
-                console.error('Deu ruim: ', error)
+            if (id_creator <= 99999) {
+                try {
+                    let api = `http://localhost:3000/salas/postar`;
+                    let response = await fetch(api, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            "id_sala": id_creator,
+                            "num_sala": newSalas,
+                            "qtd_maxima": newQtdMax,
+                            "tipo": `${newTipo}`
+                        }),
+                        headers: {
+                            "Content-type": "application/json; charset=UTF-8"
+                        }
+                    })
+                    const data = await response.json();
+                    setSalas(data);
+                    console.log(data);
+                    console.log(newSalas)
+
+                } catch (error) {
+                    console.error('Deu ruim: ', error)
+                }
+            } else {
+                console.error('Unable to find a unique ID within the 5-digit limit.');
             }
         }
 
@@ -113,6 +124,7 @@ const Listarsalas = () => {
     }
 
     const handleExcluir = (id_sala) => {
+        changeFactorRef.current += 1;
 
         const fetchData = async () => {
             try {
@@ -134,6 +146,10 @@ const Listarsalas = () => {
 
     const handleEditar = (sala) => {
         setSelectedSalas(sala);
+        setNewSalas(sala.num_sala);
+        setNewQtdMax(sala.qtd_maxima);
+        setNewTipo(sala.tipo);
+
         openModal();
     }
 
@@ -206,7 +222,7 @@ const Listarsalas = () => {
                         <h2>{selectedSalas ? 'Editar sala' : 'Cadastrar sala'}</h2>
                         <input
                             type="text"
-                            placeholder="Nome"
+                            placeholder="Número da sala"
                             value={newSalas}
                             onChange={handleNameChange}
                         />

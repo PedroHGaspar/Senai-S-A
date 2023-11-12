@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import "../style/listarDisciplinas.css"
 
@@ -11,6 +11,8 @@ const ListarDisciplinas = () => {
         // { id: 4, nome: 'Banco de Dados' },
         // { id: 5, nome: 'Fluxograma' },
     ]);
+    const changeFactorRef = useRef(100);
+
 
     useEffect(() => {
 
@@ -27,7 +29,7 @@ const ListarDisciplinas = () => {
                 let response = await fetch(api)
                 const data = await response.json();
                 setDisciplinas(data);
-                //console.log(data);
+                console.log(data);
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
@@ -37,7 +39,7 @@ const ListarDisciplinas = () => {
         fetchData();
 
 
-    }, [disciplinas])
+    }, [])
 
     const [newDisciplina, setNewDisciplina] = useState('');
     const [newQtdDias, setNewQtdDias] = useState('');
@@ -55,6 +57,8 @@ const ListarDisciplinas = () => {
         setNewDisciplina('');
         setNewQtdDias('');
         setNewNumFase('');
+        changeFactorRef.current -= 1;
+
     }
 
     const handleNameChange = (e) => {
@@ -74,31 +78,36 @@ const ListarDisciplinas = () => {
             console.log(disciplinas.disciplinasLista.length)
 
 
-            //We have to make this dont duplicate you know
-            let id_creator = disciplinas.disciplinasLista.length + 2
-            
+            const idMaisAlto = Math.max(...disciplinas.disciplinasLista.map(disciplina => disciplina.id_discip));
+            let id_creator = idMaisAlto + 1;
 
-            try {
-                let api = `http://localhost:3000/disciplina/postar`;
-                let response = await fetch(api, {
-                    method: 'POST',
-                    body: JSON.stringify({
-                        "id_discip": id_creator,
-                        "nm_disciplina": `${newDisciplina}`,
-                        "qtd_dias": newQtdDias,
-                        "num_fase": newNumFase
-                    }),
-                    headers: {
-                        "Content-type": "application/json; charset=UTF-8"
-                    }
-                })
-                const data = await response.json();
-                setDisciplinas(data);
-                console.log(data);
-                console.log(newDisp)
+            console.log("Id criado: ", id_creator);
 
-            } catch (error) {
-                console.error('Deu ruim: ', error)
+            if (id_creator <= 99999) {
+                try {
+                    let api = `http://localhost:3000/disciplina/postar`;
+                    let response = await fetch(api, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            "id_discip": id_creator,
+                            "nm_disciplina": `${newDisciplina}`,
+                            "qtd_dias": newQtdDias,
+                            "num_fase": newNumFase
+                        }),
+                        headers: {
+                            "Content-type": "application/json; charset=UTF-8"
+                        }
+                    })
+                    const data = await response.json();
+                    setDisciplinas(data);
+                    console.log(data);
+                    console.log(newDisp)
+
+                } catch (error) {
+                    console.error('Deu ruim: ', error)
+                }
+            } else {
+                console.error('Unable to find a unique ID within the 5-digit limit.');
             }
         }
 
@@ -113,6 +122,8 @@ const ListarDisciplinas = () => {
     }
 
     const handleExcluir = (id_discip) => {
+        changeFactorRef.current += 1;
+
         const fetchData = async () => {
             try {
                 let api = `http://localhost:3000/disciplina/deletar/${id_discip}`;
@@ -134,6 +145,10 @@ const ListarDisciplinas = () => {
 
     const handleEditar = (disciplina) => {
         setSelectedDisciplinas(disciplina);
+        setNewDisciplina(disciplina.nm_disciplina);
+        setNewQtdDias(disciplina.qtd_dias);
+        setNewNumFase(disciplina.num_fase);
+
         openModal();
     }
 
