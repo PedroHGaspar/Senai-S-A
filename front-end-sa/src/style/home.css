@@ -49,11 +49,23 @@ p {
 }
 
 .header-fixo {
+    display: flex;
     width: 100%;
     background: rgb(26, 88, 221);
-    height: 10rem;
+    height: 5rem;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
 }
+
 
 .container-lista{
     padding: 0;
+    width: 650px;
+}
+
+
+.senaiLogo{
+    width: 16%;
+    height: 60%;
 }

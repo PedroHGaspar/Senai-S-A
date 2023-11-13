@@ -27,7 +27,7 @@ const ListarDisciplinas = () => {
         }
 
         fetchData();
-    }, [])
+    }, [disciplinas])
 
     //Modal de cadastro e edição
     const openModal = () => {
@@ -153,7 +153,7 @@ const ListarDisciplinas = () => {
             <ul className='container-lista lista-scroll'>
                 {Object.values(disciplinas.disciplinasLista || {}).map(disciplina => (
                     <li className='lista-disciplinas' key={disciplina.id_discip}>
-                        <p>{disciplina.nm_disciplina}</p>
+                        {disciplina.nm_disciplina}
                         <div className='buttons-lista'>
                             <button className='button-editar' onClick={() => handleEditar(disciplina)}>
                                 <FaEdit />

@@ -12,21 +12,21 @@ const ListarProfessores = () => {
 
     useEffect(() => {
 
-        const fetchData = async () => {
+        const fetchProfessores = async () => {
             try {
                 let api = `http://localhost:3000/professores/lista`;
                 let response = await fetch(api)
                 const data = await response.json();
                 setProfessores(data);
-                console.log(data);
+                //console.log(data);
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
             }
         }
 
-        fetchData();
-    }, [])
+        fetchProfessores();
+    }, [professores])
 
     //Modal de cadastro e edição
     const openModal = () => {
@@ -145,9 +145,8 @@ const ListarProfessores = () => {
             <ul className='container-lista lista-scroll'>
                 {Object.values(professores.professoresLista || {}).map(professor => (
                     <li className='lista-professores' key={professor.id_prof}>
-                        <p>{professor.nome}</p>
+                        {professor.nome}
                         <div className='buttons-lista'>
-                            <p>{professor.disp_semana}</p>
                             <button className='button-editar' onClick={() => handleEditar(professor)}>
                                 <FaEdit />
                             </button>

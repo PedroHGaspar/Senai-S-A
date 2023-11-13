@@ -18,7 +18,7 @@ const ListarTurmas = () => {
                 let response = await fetch(api)
                 const data = await response.json();
                 setTurmas(data);
-                console.log(data);
+                //console.log(data);
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
@@ -26,7 +26,7 @@ const ListarTurmas = () => {
         }
 
         fetchData();
-    }, [])
+    }, [turmas])
 
     //Modal de cadastro e edição
     const openModal = () => {
