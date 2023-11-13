@@ -17,20 +17,20 @@ exports.buscarSala = async (req, res) => {
 exports.criarSala = async (req, res) => {
     const { id_sala, num_sala, qtd_maxima, tipo } = req.body;
     const salaNovas = await sala_Facade.criarSala(id_sala, num_sala, qtd_maxima, tipo)
-    res.status(200).send("Sala Criada")
+    console.log("Sala Criada")
 }
 
 exports.editarSala = async (req, res) => {
     const id_sala = req.params.id_sala;
     const { num_sala, qtd_maxima, tipo } = req.body;
     const salaEditada = await sala_Facade.editarSala( id_sala, num_sala, qtd_maxima, tipo )
-    res.status(200).send("Sala Editada")
+    console.log("Sala Editada")
 }
 
 exports.deletarSala = async (req, res) => {
     const deletarSalaExistente = req.params.id_sala;
     const salaDeletada = await sala_Facade.deletarSala(deletarSalaExistente)
-    res.status(200).send("Sala Deletada")
+    console.log("Sala Deletada")
 }
 
 

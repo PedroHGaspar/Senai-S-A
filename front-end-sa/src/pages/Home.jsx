@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { FaChalkboardTeacher, FaUsers, FaDoorOpen, FaBookOpen } from 'react-icons/fa';
-import ListarProfessores from './ListarProfessores';
-import ListarTurma from './ListarTurmas';
-import ListarDisciplinas from './ListarDisciplinas';
-import ListarSalas from './ListarSalas';
+import ListarProfessores from '../components/ListarProfessores';
+import ListarTurma from '../components/ListarTurmas';
+import ListarDisciplinas from '../components/ListarDisciplinas';
+import ListarSalas from '../components/ListarSalas';
 import "../style/home.css"
+import senaiLogo from '../assets/senaiLogo.jpg'
 
 const Home = () => {
     const [mostrarProfessores, setMostrarProfessores] = useState(true);
@@ -42,7 +43,9 @@ const Home = () => {
 
     return (
         <div className='container'>
-            <div className='header-fixo'></div>
+            <div className='header-fixo'>
+                <img className='senaiLogo' src={senaiLogo}/>
+            </div>
             <section className='home'>
                 <div>
                     <ul className='lista-container'>
