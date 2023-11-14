@@ -26,7 +26,7 @@ module.exports = class SalaFacade {
 
     async buscarSalaPorNumero(num_sala) {
         try {
-            const comando = `SELECT * FROM SALAS WHERE num_sala = $1`
+            const comando = 'SELECT * FROM SALAS WHERE CAST(num_sala AS TEXT) LIKE $1 || \'%\'';
             const resultado = await this.client.query(comando, [num_sala])
             return resultado.rows;
         } catch (erro) {

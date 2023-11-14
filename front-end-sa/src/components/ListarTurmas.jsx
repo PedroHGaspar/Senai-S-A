@@ -9,12 +9,19 @@ const ListarTurmas = () => {
     const [newQtdAlunos, setNewQtdAlunos] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTurmas, setSelectedTurmas] = useState(null);
+    const [pesquisaNome, setPesquisaNome] = useState('')
+
 
     useEffect(() => {
 
         const fetchData = async () => {
             try {
                 let api = `http://localhost:3000/turmas/lista`;
+
+                if (pesquisaNome) {
+                    api += `/${pesquisaNome}`
+                }
+
                 let response = await fetch(api)
                 const data = await response.json();
                 setTurmas(data);
@@ -26,7 +33,7 @@ const ListarTurmas = () => {
         }
 
         fetchData();
-    }, [turmas])
+    }, [turmas, pesquisaNome])
 
     //Modal de cadastro e edição
     const openModal = () => {
@@ -142,7 +149,16 @@ const ListarTurmas = () => {
 
     return (
         <div className='container'>
+            <div>
             <h1 className='title-header'>Lista de turmas</h1>
+            <input
+                    type="text"
+                    placeholder='Pesquisar por nome'
+                    value={pesquisaNome}
+                    onChange={(e) => setPesquisaNome(e.target.value)}
+                    className='pesquisa'
+                />
+            </div>
             <ul className='container-lista lista-scroll'>
                 {Object.values(turmas.turmasLista || {}).map(turma => (
                     <li className='lista-turma' key={turma.id_turma}>

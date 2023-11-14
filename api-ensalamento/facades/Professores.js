@@ -23,7 +23,7 @@ module.exports = class ProfessoresFacade {
 
     async buscarProfessorPeloNome(nome) {
         try {
-            const comando = 'SELECT * FROM professores WHERE nome ILIKE $1';
+            const comando = 'SELECT * FROM professores WHERE nome ILIKE $1 || \'%\'';
             const resultado = await this.client.query(comando, [nome]);
             return resultado.rows;
         } catch (erro) {

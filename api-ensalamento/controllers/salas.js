@@ -10,8 +10,8 @@ exports.listarSalas= async (req, res) => {
 
 exports.buscarSala = async (req, res) => {
     const numeroSala = req.params.num_sala;
-    const salas = await sala_Facade.buscarSalaPorNumero(numeroSala);
-    res.status(200).send({ salas })
+    const salasLista = await sala_Facade.buscarSalaPorNumero(numeroSala);
+    res.status(200).send({ salasLista })
 }
 // FUNÇÃO POST
 exports.criarSala = async (req, res) => {

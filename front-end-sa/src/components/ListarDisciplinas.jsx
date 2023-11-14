@@ -10,12 +10,19 @@ const ListarDisciplinas = () => {
     const [newNumFase, setNewNumFase] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedDisciplinas, setSelectedDisciplinas] = useState(null);
+    const [pesquisaNome, setPesquisaNome] = useState('')
+
 
     useEffect(() => {
 
         const fetchData = async () => {
             try {
                 let api = `http://localhost:3000/disciplina/lista`;
+
+                if (pesquisaNome) {
+                    api += `/${pesquisaNome}`
+                }
+
                 let response = await fetch(api)
                 const data = await response.json();
                 setDisciplinas(data);
@@ -27,7 +34,7 @@ const ListarDisciplinas = () => {
         }
 
         fetchData();
-    }, [disciplinas])
+    }, [disciplinas, pesquisaNome])
 
     //Modal de cadastro e edição
     const openModal = () => {
@@ -149,7 +156,16 @@ const ListarDisciplinas = () => {
 
     return (
         <div className='container'>
-            <h1 className='title-header'>Lista de disciplinas</h1>
+            <div>
+                <h1 className='title-header'>Lista de disciplinas</h1>
+                <input
+                    type="text"
+                    placeholder='Pesquisar por nome'
+                    value={pesquisaNome}
+                    onChange={(e) => setPesquisaNome(e.target.value)}
+                    className='pesquisa'
+                />
+            </div>
             <ul className='container-lista lista-scroll'>
                 {Object.values(disciplinas.disciplinasLista || {}).map(disciplina => (
                     <li className='lista-disciplinas' key={disciplina.id_discip}>

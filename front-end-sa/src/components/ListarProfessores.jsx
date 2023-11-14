@@ -9,16 +9,23 @@ const ListarProfessores = () => {
     const [newDisp, setNewDisp] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProfessor, setSelectedProfessor] = useState(null);
+    const [pesquisaNome, setPesquisaNome] = useState('')
+
 
     useEffect(() => {
 
         const fetchProfessores = async () => {
             try {
                 let api = `http://localhost:3000/professores/lista`;
+
+                if (pesquisaNome) {
+                    api += `/${pesquisaNome}`
+                }
+
                 let response = await fetch(api)
                 const data = await response.json();
                 setProfessores(data);
-                //console.log(data);
+                console.log(data);
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
@@ -26,7 +33,7 @@ const ListarProfessores = () => {
         }
 
         fetchProfessores();
-    }, [professores])
+    }, [professores, pesquisaNome])
 
     //Modal de cadastro e edição
     const openModal = () => {
@@ -141,7 +148,16 @@ const ListarProfessores = () => {
 
     return (
         <div className='container'>
-            <h1 className='title-header'>Lista de Professores</h1>
+            <div className='title-container'>
+                <h1 className='title-header'>Lista de Professores</h1>
+                <input
+                    type="text"
+                    placeholder='Pesquisar por nome'
+                    value={pesquisaNome}
+                    onChange={(e) => setPesquisaNome(e.target.value)}
+                    className='pesquisa'
+                />
+            </div>
             <ul className='container-lista lista-scroll'>
                 {Object.values(professores.professoresLista || {}).map(professor => (
                     <li className='lista-professores' key={professor.id_prof}>

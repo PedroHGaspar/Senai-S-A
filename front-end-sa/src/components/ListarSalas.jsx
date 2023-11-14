@@ -10,12 +10,19 @@ const Listarsalas = () => {
     const [newTipo, setNewTipo] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedSalas, setSelectedSalas] = useState(null);
+    const [pesquisaNome, setPesquisaNome] = useState('')
+
 
     useEffect(() => {
 
         const fetchData = async () => {
             try {
                 let api = `http://localhost:3000/salas/lista`;
+
+                if (pesquisaNome) {
+                    api += `/${pesquisaNome}`
+                }
+
                 let response = await fetch(api)
                 const data = await response.json();
                 setSalas(data);
@@ -27,7 +34,7 @@ const Listarsalas = () => {
         }
 
         fetchData();
-    }, [salas])
+    }, [salas, pesquisaNome])
 
     //Modal de cadastro e edição
     const openModal = () => {
@@ -150,7 +157,16 @@ const Listarsalas = () => {
 
     return (
         <div className='container'>
-            <h1 className='title-header'>Lista de salas</h1>
+            <div>
+                <h1 className='title-header'>Lista de salas</h1>
+                <input
+                    type="number"
+                    placeholder='Pesquisar por nome'
+                    value={pesquisaNome}
+                    onChange={(e) => setPesquisaNome(e.target.value === '' ? '' : Number(e.target.value))}
+                    className='pesquisa'
+                />
+            </div>
             <ul className='container-lista lista-scroll'>
                 {Object.values(salas.salasLista || {}).map(sala => (
                     <li className='lista-salas' key={sala.id_sala}>

@@ -9,8 +9,8 @@ exports.listarDisciplina = async (req, res) => {
 
 exports.buscarDisciplina = async (req, res) => {
     const disciplinaDataBase = req.params.nm_disciplina;
-    const disciplinas = await disciplina_Facade.buscarDisciplinaPeloNome(disciplinaDataBase)
-    res.status(200).send({ disciplinas })
+    const disciplinasLista = await disciplina_Facade.buscarDisciplinaPeloNome(disciplinaDataBase)
+    res.status(200).send({ disciplinasLista })
 }
 exports.adicionarDisciplina = async (req, res) => {
     const { id_discip, nm_disciplina, qtd_dias, num_fase } = req.body;

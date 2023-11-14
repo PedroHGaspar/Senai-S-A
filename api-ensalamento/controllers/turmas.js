@@ -9,8 +9,8 @@ exports.listarTurmas = async (req, res) => {
 
 exports.buscarTurmaPeloNome = async (req, res) => {
     const professoresDataBase = req.params.nm_turma;
-    const turma = await turmas_Facade.buscarTurmaPeloNome(professoresDataBase)
-    res.status(200).send({ turma })
+    const turmasLista = await turmas_Facade.buscarTurmaPeloNome(professoresDataBase)
+    res.status(200).send({ turmasLista })
 }
 exports.adicionarTurma = async (req, res) => {
     const { id_turma, nm_turma, qtd_alunos } = req.body;

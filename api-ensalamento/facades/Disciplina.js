@@ -24,7 +24,7 @@ module.exports = class DisciplinaFacade {
 
     async buscarDisciplinaPeloNome(nm_disciplina) {
         try {
-            const comando = `SELECT * FROM disciplina WHERE nm_disciplina ILIKE $1`
+            const comando = `SELECT * FROM disciplina WHERE nm_disciplina ILIKE $1 || \'%\'`
             const resultado = await this.client.query(comando, [nm_disciplina])
             return resultado.rows
         }

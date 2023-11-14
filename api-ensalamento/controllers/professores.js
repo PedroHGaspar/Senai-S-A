@@ -9,8 +9,8 @@ exports.listarProfessores = async (req, res) => {
 
 exports.buscarProfessores = async (req, res) => {
     const professoresDataBase = req.params.nome;
-    const professores = await professores_Facade.buscarProfessorPeloNome(professoresDataBase)
-    res.status(200).send({ professores })
+    const professoresLista = await professores_Facade.buscarProfessorPeloNome(professoresDataBase)
+    res.status(200).send({ professoresLista })
 }
 exports.adicionarProfessor = async (req, res) => {
     const { id_prof, nome, disp_semana } = req.body;

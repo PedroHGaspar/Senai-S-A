@@ -23,7 +23,7 @@ module.exports = class TurmasFacade {
 
     async buscarTurmaPeloNome(nm_turma) {
         try {
-            const comando = 'SELECT * FROM TURMA WHERE nm_turma ILIKE $1';
+            const comando = 'SELECT * FROM TURMA WHERE nm_turma ILIKE $1 || \'%\'';
             const resultado = await this.client.query(comando, [nm_turma]);
             return resultado.rows;
         } catch (erro) {
