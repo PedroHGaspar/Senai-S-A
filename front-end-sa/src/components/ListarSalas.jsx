@@ -191,10 +191,10 @@ const Listarsalas = () => {
                             value={newTipo}
                             onChange={handleTipo}
                         />
-                        <button onClick={selectedSalas ? () => handleSalvarEdicao(selectedSalas.id_sala) : handleCadastrar}>
+                        <button  className='botao-salvar-modal' onClick={selectedSalas ? () => handleSalvarEdicao(selectedSalas.id_sala) : handleCadastrar}>
                             {selectedSalas ? 'Salvar' : 'Cadastrar'}
                         </button>
-                        <button onClick={closeModal}>Fechar Modal</button>
+                        <button onClick={closeModal} className="botao-fechar-modal">Fechar Modal</button>
                     </div>
                 </div>
             )}

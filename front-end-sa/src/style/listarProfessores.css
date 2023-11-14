@@ -67,3 +67,8 @@
     z-index: 999;
     backdrop-filter: blur(5px);
 }
+
+
+.botao-fechar-modal {
+    color: red;
+}

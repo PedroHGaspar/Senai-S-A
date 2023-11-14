@@ -190,10 +190,10 @@ const ListarDisciplinas = () => {
                             value={newNumFase}
                             onChange={handleNumFase}
                         />
-                        <button onClick={selectedDisciplinas ? () => handleSalvarEdicao(selectedDisciplinas.id_discip) : handleCadastrar}>
+                        <button className='botao-salvar-modal' onClick={selectedDisciplinas ? () => handleSalvarEdicao(selectedDisciplinas.id_discip) : handleCadastrar}>
                             {selectedDisciplinas ? 'Salvar' : 'Cadastrar'}
                         </button>
-                        <button onClick={closeModal}>Fechar Modal</button>
+                        <button onClick={closeModal} className="botao-fechar-modal">Fechar Modal</button>
                     </div>
                 </div>
             )}

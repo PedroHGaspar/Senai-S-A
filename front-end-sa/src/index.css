@@ -49,11 +49,82 @@ button {
   font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
+  background: rgb(26, 88, 221);
   transition: border-color 0.25s;
 }
-button:hover {
-  border-color: #646cff;
+
+.modal {
+  display: flex;
+  flex-direction: column;
 }
+
+
+.botao-cadastrar {
+  color: #ffffff;
+}
+
+.botao-salvar-modal {
+  color: orange;
+}
+
+.botao-fechar-modal {
+  color: red;
+}
+  button:hover {
+    transition: 0.25s;
+    background-color: #1046b9;
+  
+}
+
+.input-container {
+  position: relative;
+}
+
+input {
+  margin: 10px;
+  font-size: 1em;
+  padding: 0.6em 1em;
+  border: none;
+  border-radius: 6px;
+  background-color: #f8f8f8;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  max-width: 200px;
+  color: #333;
+}
+
+input:hover {
+  background-color: #f2f2f2;
+}
+
+input:focus {
+  outline: none;
+  background-color: rgb(218, 218, 218);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+input::placeholder {
+  color: #999;
+}
+
+@keyframes input-focus {
+  from {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0.1);
+  }
+
+  to {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.input:focus {
+  animation: input-focus 0.3s ease;
+}
+
+
+
 
 @media (prefers-color-scheme: light) {
   :root {
@@ -64,7 +135,7 @@ button:hover {
     color: #747bff;
   }
   button {
-    background-color: #f9f9f9;
+    background: rgb(26, 88, 221);
   }
 }
 

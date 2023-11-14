@@ -178,10 +178,10 @@ const ListarTurmas = () => {
                             onChange={handleQtdAlunos}
                         />
 
-                        <button onClick={selectedTurmas ? () => handleSalvarEdicao(selectedTurmas.id_turma) : handleCadastrar}>
+                        <button className='botao-salvar-modal' onClick={selectedTurmas ? () => handleSalvarEdicao(selectedTurmas.id_turma) : handleCadastrar}>
                             {selectedTurmas ? 'Salvar' : 'Cadastrar'}
                         </button>
-                        <button onClick={closeModal}>Fechar Modal</button>
+                        <button onClick={closeModal} className="botao-fechar-modal">Fechar Modal</button>
                     </div>
                 </div>
             )}

@@ -177,11 +177,11 @@ const ListarProfessores = () => {
                             value={newDisp}
                             onChange={handleDispChange}
                         />
-                        <button onClick={selectedProfessor ? () => handleSalvarEdicao(selectedProfessor.id_prof) : handleCadastrar}>
+                        <button  className='botao-salvar-modal' onClick={selectedProfessor ? () => handleSalvarEdicao(selectedProfessor.id_prof) : handleCadastrar}>
                             {selectedProfessor ? 'Salvar' : 'Cadastrar'}
                         </button>
 
-                        <button onClick={closeModal}>Fechar Modal</button>
+                        <button onClick={closeModal} className="botao-fechar-modal">Fechar Modal</button>
                     </div>
                 </div>
             )}
