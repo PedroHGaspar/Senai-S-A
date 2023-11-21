@@ -1,4 +1,4 @@
-*{
+* {
   background: #FFF;
 }
 
@@ -23,6 +23,7 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #535bf2;
 }
@@ -56,25 +57,66 @@ button {
 .modal {
   display: flex;
   flex-direction: column;
+  width: auto;
+  height: auto;
+  border-radius: 10px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
 }
 
+.button-grupo-modal {
+  align-items: center;
+  display: flex;
+  gap: 15px;
+  justify-content: end;
+  margin-top: 30px;
+
+}
+
+
+.modal h2 {
+  margin-top: 0px;
+}
 
 .botao-cadastrar {
   color: #ffffff;
 }
 
-.botao-salvar-modal {
-  color: orange;
+.botao-salvar-modal,
+.botao-fechar-modal {
+  color: #ffffff;
+  padding: 5px;
+  width: 120px;
 }
 
 .botao-fechar-modal {
-  color: red;
+  background-color: #333;
 }
-  button:hover {
-    transition: 0.25s;
-    background-color: #1046b9;
-  
+
+
+.botao-fechar-modal:hover {
+  background-color: rgba(65, 63, 63, 0.904);
 }
+
+button:hover {
+  transition: 0.25s;
+  background-color: #1046b9;
+
+}
+
+
+
+
+
+/*
+Inputs modal
+*/
 
 .input-container {
   position: relative;
@@ -89,8 +131,17 @@ input {
   background-color: #f8f8f8;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  max-width: 200px;
+  width: 300px;
   color: #333;
+
+}
+
+
+.input-grupo-modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 input:hover {
@@ -107,6 +158,9 @@ input::placeholder {
   color: #999;
 }
 
+/*
+Input modal transitions
+*/
 @keyframes input-focus {
   from {
     transform: scale(1);
@@ -131,14 +185,16 @@ input::placeholder {
     color: #213547;
     background-color: #ffffff;
   }
+
   a:hover {
     color: #747bff;
   }
+
   button {
     background: rgb(26, 88, 221);
   }
 }
 
-.App{
+.App {
   width: 100%;
 }

@@ -44,18 +44,6 @@
     overflow-y: auto;
 }
 
-/* Estilos para o modal */
-.modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: white;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-}
-
 /* Estilos para o fundo desfocado */
 .modal-background {
     position: fixed;
@@ -70,5 +58,5 @@
 
 
 .botao-fechar-modal {
-    color: red;
+    color: #ffffff
 }

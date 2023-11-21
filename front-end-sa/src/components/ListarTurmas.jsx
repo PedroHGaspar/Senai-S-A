@@ -142,7 +142,7 @@ const ListarTurmas = () => {
 
     return (
         <div className='container'>
-            <h1 className='title-header'>Lista de turmas</h1>
+            <h1 className='title-header'>Lista de Turmas</h1>
             <ul className='container-lista lista-scroll'>
                 {Object.values(turmas.turmasLista || {}).map(turma => (
                     <li className='lista-turma' key={turma.id_turma}>
@@ -159,29 +159,34 @@ const ListarTurmas = () => {
                 ))}
             </ul>
             <button onClick={openModal} className="botao-cadastrar">
-                Cadastrar turma
+                Cadastrar Turma
             </button>
             {isModalOpen && (
                 <div className="modal-background">
                     <div className="modal">
                         <h2>{selectedTurmas ? 'Editar turma' : 'Cadastrar turma'}</h2>
-                        <input
-                            type="text"
-                            placeholder="Nome"
-                            value={newTurma}
-                            onChange={handleNameChange}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Quantidades de alunos"
-                            value={newQtdAlunos}
-                            onChange={handleQtdAlunos}
-                        />
+                        <div className='input-grupo-modal'>
+                            <input
 
-                        <button className='botao-salvar-modal' onClick={selectedTurmas ? () => handleSalvarEdicao(selectedTurmas.id_turma) : handleCadastrar}>
-                            {selectedTurmas ? 'Salvar' : 'Cadastrar'}
-                        </button>
-                        <button onClick={closeModal} className="botao-fechar-modal">Fechar Modal</button>
+                                type="text"
+                                placeholder="Nome"
+                                value={newTurma}
+                                onChange={handleNameChange}
+                            />
+                            <input
+
+                                type="text"
+                                placeholder="Quantidades de alunos"
+                                value={newQtdAlunos}
+                                onChange={handleQtdAlunos}
+                            />
+                        </div>
+                        <div className='button-grupo-modal'>
+                            <button className='botao-salvar-modal' onClick={selectedTurmas ? () => handleSalvarEdicao(selectedTurmas.id_turma) : handleCadastrar}>
+                                {selectedTurmas ? 'Salvar' : 'Cadastrar'}
+                            </button>
+                            <button onClick={closeModal} className="botao-fechar-modal">Fechar</button>
+                        </div>
                     </div>
                 </div>
             )}
