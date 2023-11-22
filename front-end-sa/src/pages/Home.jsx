@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { FaChalkboardTeacher, FaUsers, FaDoorOpen, FaBookOpen } from 'react-icons/fa';
+import { FaChalkboardTeacher, FaUsers, FaDoorOpen, FaBookOpen, FaGraduationCap } from 'react-icons/fa';
 import ListarProfessores from '../components/ListarProfessores';
 import ListarTurma from '../components/ListarTurmas';
 import ListarDisciplinas from '../components/ListarDisciplinas';
 import ListarSalas from '../components/ListarSalas';
+import Ensalamento from '../components/Ensalamento';
 import "../style/home.css"
 import senaiLogo from '../assets/senaiLogo.jpg'
 
@@ -12,12 +13,14 @@ const Home = () => {
     const [mostrarTurma, setMostrarTurma] = useState(false);
     const [mostrarSala, setMostrarSala] = useState(false);
     const [mostrarDisciplina, setMostrarDisciplina] = useState(false);
+    const [mostrarEnsalamento, setMostrarEnsalamento] = useState(false);
 
     const toggleProfessores = () => {
         setMostrarProfessores(true);
         setMostrarTurma(false);
         setMostrarSala(false);
         setMostrarDisciplina(false);
+        setMostrarEnsalamento(false);
     }
 
     const toggleTurma = () => {
@@ -25,6 +28,7 @@ const Home = () => {
         setMostrarTurma(true);
         setMostrarSala(false);
         setMostrarDisciplina(false);
+        setMostrarEnsalamento(false);
     }
 
     const toggleSala = () => {
@@ -32,6 +36,7 @@ const Home = () => {
         setMostrarTurma(false);
         setMostrarSala(true);
         setMostrarDisciplina(false);
+        setMostrarEnsalamento(false);
     }
 
     const toggleDisciplinas = () => {
@@ -39,6 +44,15 @@ const Home = () => {
         setMostrarTurma(false);
         setMostrarSala(false);
         setMostrarDisciplina(true);
+        setMostrarEnsalamento(false);
+    }
+    const toggleEnsalamento = () => {
+        setMostrarProfessores(false);
+        setMostrarTurma(false);
+        setMostrarSala(false);
+        setMostrarDisciplina(false);
+        setMostrarEnsalamento(true);
+
     }
 
     return (
@@ -61,6 +75,9 @@ const Home = () => {
                         <li className='lista-icones-menu' onClick={toggleDisciplinas}>
                             <FaBookOpen className='icon' /> <p>Disciplinas</p>
                         </li>
+                        <li className='lista-icones-menu' onClick={toggleEnsalamento}>
+                            <FaGraduationCap className='icon' /> <p>Ensalar</p>
+                        </li>
                     </ul>
                 </div>
                 <div>
@@ -70,6 +87,7 @@ const Home = () => {
                         {mostrarTurma && <ListarTurma />}
                         {mostrarSala && <ListarSalas />}
                         {mostrarDisciplina && <ListarDisciplinas />}
+                        {mostrarEnsalamento && <Ensalamento />}
                     </div>
                 </div>
             </section>

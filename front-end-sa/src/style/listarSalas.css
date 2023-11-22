@@ -47,3 +47,8 @@ svg{
 .container-lista{
     height: 300px;
 }
+
+
+.botao-fechar-modal {
+    color: #ffffff;
+}

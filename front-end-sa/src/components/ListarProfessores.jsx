@@ -165,23 +165,29 @@ const ListarProfessores = () => {
                 <div className="modal-background">
                     <div className="modal">
                         <h2>{selectedProfessor ? 'Editar Professor' : 'Cadastrar Professor'}</h2>
-                        <input
-                            type="text"
-                            placeholder="Nome"
-                            value={newProfessorName}
-                            onChange={handleNameChange}
-                        />
-                        <input
-                            type="text"
-                            placeholder="Disponibilidade"
-                            value={newDisp}
-                            onChange={handleDispChange}
-                        />
-                        <button onClick={selectedProfessor ? () => handleSalvarEdicao(selectedProfessor.id_prof) : handleCadastrar}>
-                            {selectedProfessor ? 'Salvar' : 'Cadastrar'}
-                        </button>
+                        <div className='input-grupo-modal'>
+                            <input
 
-                        <button onClick={closeModal}>Fechar Modal</button>
+                                type="text"
+                                placeholder="Nome"
+                                value={newProfessorName}
+                                onChange={handleNameChange}
+                            />
+                            <input
+
+                                type="text"
+                                placeholder="Disponibilidade"
+                                value={newDisp}
+                                onChange={handleDispChange}
+                            />
+                        </div>
+                        <div className='button-grupo-modal'>
+                            <button className='botao-salvar-modal' onClick={selectedProfessor ? () => handleSalvarEdicao(selectedProfessor.id_prof) : handleCadastrar}>
+                                {selectedProfessor ? 'Salvar' : 'Cadastrar'}
+                            </button>
+
+                            <button onClick={closeModal} className="botao-fechar-modal">Fechar</button>
+                        </div>
                     </div>
                 </div>
             )}

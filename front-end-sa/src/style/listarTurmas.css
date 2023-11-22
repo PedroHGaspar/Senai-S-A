@@ -42,3 +42,7 @@ svg{
     overflow-x: hidden;
     overflow-y: auto;
 }
+
+.botao-fechar-modal {
+    color: #ffffff;
+}
