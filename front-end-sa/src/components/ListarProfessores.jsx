@@ -14,7 +14,7 @@ const ListarProfessores = () => {
 
         const fetchProfessores = async () => {
             try {
-                let api = `http://localhost:3000/professores/lista`;
+                let api = `https://senai-back-end.onrender.com/professores/lista`;
                 let response = await fetch(api)
                 const data = await response.json();
                 setProfessores(data);
@@ -56,7 +56,7 @@ const ListarProfessores = () => {
 
             if (id_creator <= 99999) {
                 try {
-                    let api = `http://localhost:3000/professores/postar`;
+                    let api = `https://senai-back-end.onrender.com/professores/postar`;
                     let response = await fetch(api, {
                         method: 'POST',
                         body: JSON.stringify({
@@ -89,7 +89,7 @@ const ListarProfessores = () => {
     const handleExcluir = (id_prof) => {
         const fetchData = async () => {
             try {
-                let api = `http://localhost:3000/professores/deletar/${id_prof}`;
+                let api = `https://senai-back-end.onrender.com/professores/deletar/${id_prof}`;
                 let response = await fetch(api, { method: 'DELETE' })
                 const data = await response.json();
                 setProfessores(data);
@@ -115,7 +115,7 @@ const ListarProfessores = () => {
 
         const fetchData = async () => {
             try {
-                let api = `http://localhost:3000/professores/atualizar/${id_prof}`;
+                let api = `https://senai-back-end.onrender.com/professores/atualizar/${id_prof}`;
                 let response = await fetch(api, {
                     method: 'PUT',
                     body: JSON.stringify({

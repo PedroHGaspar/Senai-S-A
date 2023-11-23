@@ -15,7 +15,7 @@ const ListarDisciplinas = () => {
 
         const fetchData = async () => {
             try {
-                let api = `http://localhost:3000/disciplina/lista`;
+                let api = `https://senai-back-end.onrender.com/disciplina/lista`;
                 let response = await fetch(api)
                 const data = await response.json();
                 setDisciplinas(data);
@@ -61,7 +61,7 @@ const ListarDisciplinas = () => {
 
             if (id_creator <= 99999) {
                 try {
-                    let api = `http://localhost:3000/disciplina/postar`;
+                    let api = `https://senai-back-end.onrender.com/disciplina/postar`;
                     let response = await fetch(api, {
                         method: 'POST',
                         body: JSON.stringify({
@@ -95,7 +95,7 @@ const ListarDisciplinas = () => {
     const handleExcluir = (id_discip) => {
         const fetchData = async () => {
             try {
-                let api = `http://localhost:3000/disciplina/deletar/${id_discip}`;
+                let api = `https://senai-back-end.onrender.com/disciplina/deletar/${id_discip}`;
                 let response = await fetch(api, { method: 'DELETE' })
                 const data = await response.json();
                 setDisciplinas(data);
@@ -122,7 +122,7 @@ const ListarDisciplinas = () => {
 
         const fetchData = async () => {
             try {
-                let api = `http://localhost:3000/disciplina/atualizar/${id_discip}`;
+                let api = `https://senai-back-end.onrender.com/disciplina/atualizar/${id_discip}`;
                 let response = await fetch(api, {
                     method: 'PUT',
                     body: JSON.stringify({

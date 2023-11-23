@@ -15,7 +15,7 @@ const Listarsalas = () => {
 
         const fetchData = async () => {
             try {
-                let api = `http://localhost:3000/salas/lista`;
+                let api = `https://senai-back-end.onrender.com/salas/lista`;
                 let response = await fetch(api)
                 const data = await response.json();
                 setSalas(data);
@@ -61,7 +61,7 @@ const Listarsalas = () => {
 
             if (id_creator <= 99999) {
                 try {
-                    let api = `http://localhost:3000/salas/postar`;
+                    let api = `https://senai-back-end.onrender.com/salas/postar`;
                     let response = await fetch(api, {
                         method: 'POST',
                         body: JSON.stringify({
@@ -96,7 +96,7 @@ const Listarsalas = () => {
 
         const fetchData = async () => {
             try {
-                let api = `http://localhost:3000/salas/deletar/${id_sala}`;
+                let api = `https://senai-back-end.onrender.com/salas/deletar/${id_sala}`;
                 let response = await fetch(api, { method: 'DELETE' })
                 const data = await response.json();
                 setTurmas(data);
@@ -123,7 +123,7 @@ const Listarsalas = () => {
 
         const fetchData = async () => {
             try {
-                let api = `http://localhost:3000/salas/atualizar/${id_sala}`;
+                let api = `https://senai-back-end.onrender.com/salas/atualizar/${id_sala}`;
                 let response = await fetch(api, {
                     method: 'PUT',
                     body: JSON.stringify({

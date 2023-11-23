@@ -14,7 +14,7 @@ const ListarTurmas = () => {
 
         const fetchData = async () => {
             try {
-                let api = `http://localhost:3000/turmas/lista`;
+                let api = `https://senai-back-end.onrender.com/turmas/lista`;
                 let response = await fetch(api)
                 const data = await response.json();
                 setTurmas(data);
@@ -56,7 +56,7 @@ const ListarTurmas = () => {
 
             if (id_creator <= 99999) {
                 try {
-                    let api = `http://localhost:3000/turmas/postar`;
+                    let api = `https://senai-back-end.onrender.com/turmas/postar`;
                     let response = await fetch(api, {
                         method: 'POST',
                         body: JSON.stringify({
@@ -90,7 +90,7 @@ const ListarTurmas = () => {
 
         const fetchData = async () => {
             try {
-                let api = `http://localhost:3000/turmas/deletar/${id_turma}`;
+                let api = `https://senai-back-end.onrender.com/turmas/deletar/${id_turma}`;
                 let response = await fetch(api, { method: 'DELETE' })
                 const data = await response.json();
                 setTurmas(data);
@@ -116,7 +116,7 @@ const ListarTurmas = () => {
 
         const fetchData = async () => {
             try {
-                let api = `http://localhost:3000/turmas/atualizar/${id_turma}`;
+                let api = `https://senai-back-end.onrender.com/turmas/atualizar/${id_turma}`;
                 let response = await fetch(api, {
                     method: 'PUT',
                     body: JSON.stringify({
