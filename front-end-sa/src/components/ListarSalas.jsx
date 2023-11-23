@@ -14,27 +14,26 @@ const Listarsalas = () => {
 
 
     useEffect(() => {
+        fetchSalas();
+    }, [])
 
-        const fetchData = async () => {
-            try {
-                let api = `http://localhost:3000/salas/lista`;
+    const fetchSalas = async () => {
+        try {
+            let api = `http://localhost:3000/salas/lista`;
 
-                if (pesquisaNome) {
-                    api += `/${pesquisaNome}`
-                }
-
-                let response = await fetch(api)
-                const data = await response.json();
-                setSalas(data);
-                //console.log(data)
-
-            } catch (error) {
-                console.error('Deu ruim: ', error)
+            if (pesquisaNome) {
+                api += `/${pesquisaNome}`
             }
-        }
 
-        fetchData();
-    }, [salas, pesquisaNome])
+            let response = await fetch(api)
+            const data = await response.json();
+            setSalas(data);
+            //console.log(data)
+
+        } catch (error) {
+            console.error('Deu ruim: ', error)
+        }
+    }
 
     //Modal de cadastro e edição
     const openModal = () => {
@@ -96,6 +95,7 @@ const Listarsalas = () => {
 
         fetchData();
         closeModal();
+        fetchSalas();
     }
 
     //EXCLUSÃO (DELETE)
@@ -115,6 +115,7 @@ const Listarsalas = () => {
         }
 
         fetchData();
+        fetchSalas();
     }
 
     //EDIÇÃO (PUT)
@@ -153,6 +154,7 @@ const Listarsalas = () => {
 
         fetchData();
         closeModal();
+        fetchSalas();
     }
 
     return (

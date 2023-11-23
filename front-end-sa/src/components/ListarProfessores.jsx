@@ -13,27 +13,21 @@ const ListarProfessores = () => {
 
 
     useEffect(() => {
-
-        const fetchProfessores = async () => {
-            try {
-                let api = `http://localhost:3000/professores/lista`;
-
-                if (pesquisaNome) {
-                    api += `/${pesquisaNome}`
-                }
-
-                let response = await fetch(api)
-                const data = await response.json();
-                setProfessores(data);
-                console.log(data);
-
-            } catch (error) {
-                console.error('Deu ruim: ', error)
-            }
-        }
-
         fetchProfessores();
-    }, [professores, pesquisaNome])
+    }, [])
+
+    const fetchProfessores = async () => {
+        try {
+            let api = `http://localhost:3000/professores/lista`;
+            let response = await fetch(api)
+            const data = await response.json();
+            setProfessores(data);
+            console.log(data);
+        } catch (error) {
+            console.error('Deu ruim: ', error)
+        }
+    }
+
 
     //Modal de cadastro e edição
     const openModal = () => {
@@ -90,6 +84,7 @@ const ListarProfessores = () => {
 
         fetchData();
         closeModal();
+        fetchProfessores();
     };
 
     //EXCLUSÃO (DELETE)
@@ -108,6 +103,7 @@ const ListarProfessores = () => {
         }
 
         fetchData();
+        fetchProfessores();
     }
 
     //EDIÇÃO (PUT)
@@ -144,6 +140,7 @@ const ListarProfessores = () => {
 
         fetchData();
         closeModal();
+        fetchProfessores();
     }
 
     return (

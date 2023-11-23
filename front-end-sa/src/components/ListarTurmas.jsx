@@ -13,27 +13,26 @@ const ListarTurmas = () => {
 
 
     useEffect(() => {
+        fetchTurmas();
+    }, [])
 
-        const fetchData = async () => {
-            try {
-                let api = `http://localhost:3000/turmas/lista`;
+    const fetchTurmas = async () => {
+        try {
+            let api = `http://localhost:3000/turmas/lista`;
 
-                if (pesquisaNome) {
-                    api += `/${pesquisaNome}`
-                }
-
-                let response = await fetch(api)
-                const data = await response.json();
-                setTurmas(data);
-                //console.log(data);
-
-            } catch (error) {
-                console.error('Deu ruim: ', error)
+            if (pesquisaNome) {
+                api += `/${pesquisaNome}`
             }
-        }
 
-        fetchData();
-    }, [turmas, pesquisaNome])
+            let response = await fetch(api)
+            const data = await response.json();
+            setTurmas(data);
+            //console.log(data);
+
+        } catch (error) {
+            console.error('Deu ruim: ', error)
+        }
+    }
 
     //Modal de cadastro e edição
     const openModal = () => {
@@ -90,6 +89,7 @@ const ListarTurmas = () => {
 
         fetchData();
         closeModal();
+        fetchTurmas();
     }
 
     //EXCLUSÃO (DELETE)
@@ -109,6 +109,7 @@ const ListarTurmas = () => {
         }
 
         fetchData();
+        fetchTurmas();
     }
 
     //EDIÇÃO (PUT)
@@ -145,6 +146,7 @@ const ListarTurmas = () => {
 
         fetchData();
         closeModal();
+        fetchTurmas();
     }
 
     return (
