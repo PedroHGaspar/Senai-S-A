@@ -15,18 +15,24 @@ exports.buscarProfessores = async (req, res) => {
 exports.adicionarProfessor = async (req, res) => {
     const { id_prof, nome, disp_semana } = req.body;
     const professorNovo = await professores_Facade.adicionarProfessor(id_prof, nome, disp_semana)
-    console.log("Professor Adcionado")
+    // console.log("Professor Adcionado")
+    res.status(200).send({ professorNovo })
+
 }
 
 exports.editarProfessor = async (req, res) => {
     const id_prof = req.params.id_prof;
     const { nome, disp_semana } = req.body;
     const professorEditado = await professores_Facade.editarProfessor(id_prof, nome, disp_semana)
-    console.log("Professor Editado")
+    // console.log("Professor Editado")
+    res.status(200).send({ professorEditado })
+
 }
 
 exports.deletarProfessor = async (req, res) => {
     const deletarProfessorExistente = req.params.id_prof;
     const professorDeletado = await professores_Facade.deletarProfessor(deletarProfessorExistente)
-    console.log("Professor Deletado")
+    // console.log("Professor Deletado")
+    res.status(200).send({ professorDeletado })
+
 }

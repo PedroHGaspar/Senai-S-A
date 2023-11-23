@@ -15,18 +15,24 @@ exports.buscarDisciplina = async (req, res) => {
 exports.adicionarDisciplina = async (req, res) => {
     const { id_discip, nm_disciplina, qtd_dias, num_fase } = req.body;
     const disciplinaNova = await disciplina_Facade.adicionarDisciplina(id_discip, nm_disciplina, qtd_dias, num_fase)
-    console.log("Disciplina Criada")
+    // console.log("Disciplina Criada")
+    res.status(200).send({ disciplinaNova })
+
 }
 
 exports.editarDisciplina = async (req, res) => {
     const id_discip = req.params.id_discip;
     const { nm_disciplina, qtd_dias, num_fase } = req.body;
     const disciplinaEditado = await disciplina_Facade.editarDisciplina(id_discip, nm_disciplina, qtd_dias, num_fase)
-    console.log("Disciplina Editado")
+    // console.log("Disciplina Editado")
+    res.status(200).send({ disciplinaEditado })
+
 }
 
 exports.deletarDisciplina = async (req, res) => {
     const deletarDisciplinaExistente = req.params.id_discip;
     const disciplinaDeletado = await disciplina_Facade.deletarDisciplina(deletarDisciplinaExistente)
-    console.log("Disciplina Deletado")
+    // console.log("Disciplina Deletado")
+    res.status(200).send({ disciplinaDeletado })
+
 }
