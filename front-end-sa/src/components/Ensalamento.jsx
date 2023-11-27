@@ -182,7 +182,7 @@ const Ensalamento = () => {
               </select>
             )}
             <div className="button-grupo-modal">
-              <button onClick={closeModal} className="botao-cadastrar">
+              <button onClick={closeModal} className="botao-salvar-modal">
                 Salvar
               </button>
               <button onClick={closeModal} className="botao-fechar-modal">
