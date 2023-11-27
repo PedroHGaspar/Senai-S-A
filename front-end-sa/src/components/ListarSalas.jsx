@@ -12,22 +12,19 @@ const Listarsalas = () => {
     const [selectedSalas, setSelectedSalas] = useState(null);
 
     useEffect(() => {
+        fetchSalas();
+    }, [])
 
-        const fetchData = async () => {
-            try {
-                let api = `https://senai-back-end.onrender.com/salas/lista`;
-                let response = await fetch(api)
-                const data = await response.json();
-                setSalas(data);
-                //console.log(data)
-
-            } catch (error) {
-                console.error('Deu ruim: ', error)
-            }
+    const fetchSalas = async () => {
+        try {
+            let api = `https://senai-back-end.onrender.com/salas/lista`;
+            let response = await fetch(api)
+            const data = await response.json();
+            setSalas(data);
+        } catch (error) {
+            console.error('Deu ruim: ', error)
         }
-
-        fetchData();
-    }, [salas])
+    }
 
     //Modal de cadastro e edição
     const openModal = () => {
@@ -76,8 +73,6 @@ const Listarsalas = () => {
                     })
                     const data = await response.json();
                     setSalas(data);
-                    console.log(data);
-                    console.log(newSalas)
 
                 } catch (error) {
                     console.error('Deu ruim: ', error)
@@ -89,6 +84,7 @@ const Listarsalas = () => {
 
         fetchData();
         closeModal();
+        fetchSalas();
     }
 
     //EXCLUSÃO (DELETE)
@@ -100,7 +96,6 @@ const Listarsalas = () => {
                 let response = await fetch(api, { method: 'DELETE' })
                 const data = await response.json();
                 setTurmas(data);
-                console.log(data);
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
@@ -108,6 +103,7 @@ const Listarsalas = () => {
         }
 
         fetchData();
+        fetchSalas();
     }
 
     //EDIÇÃO (PUT)
@@ -137,7 +133,6 @@ const Listarsalas = () => {
                 })
                 const data = await response.json();
                 setSalas(data);
-                console.log(data);
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
@@ -146,6 +141,7 @@ const Listarsalas = () => {
 
         fetchData();
         closeModal();
+        fetchSalas();
     }
 
     return (
