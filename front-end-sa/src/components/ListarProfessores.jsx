@@ -20,7 +20,6 @@ const ListarProfessores = () => {
             let response = await fetch(api)
             const data = await response.json();
             setProfessores(data);
-            //console.log(data);
 
         } catch (error) {
             console.error('Deu ruim: ', error)
@@ -69,9 +68,6 @@ const ListarProfessores = () => {
                     });
                     const data = await response.json();
                     setProfessores(data);
-                    console.log(data);
-                    console.log(newDisp);
-                    console.log(newProfessorName);
                 } catch (error) {
                     console.error('Deu ruim: ', error);
                 }
@@ -93,7 +89,6 @@ const ListarProfessores = () => {
                 let response = await fetch(api, { method: 'DELETE' })
                 const data = await response.json();
                 setProfessores(data);
-                console.log(data);
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
@@ -129,7 +124,6 @@ const ListarProfessores = () => {
                 })
                 const data = await response.json();
                 setProfessores(data);
-                console.log(data);
 
             } catch (error) {
                 console.error('Deu ruim: ', error)

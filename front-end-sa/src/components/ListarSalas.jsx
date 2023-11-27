@@ -21,8 +21,6 @@ const Listarsalas = () => {
             let response = await fetch(api)
             const data = await response.json();
             setSalas(data);
-            //console.log(data)
-
         } catch (error) {
             console.error('Deu ruim: ', error)
         }
@@ -75,8 +73,6 @@ const Listarsalas = () => {
                     })
                     const data = await response.json();
                     setSalas(data);
-                    console.log(data);
-                    console.log(newSalas)
 
                 } catch (error) {
                     console.error('Deu ruim: ', error)
@@ -100,7 +96,6 @@ const Listarsalas = () => {
                 let response = await fetch(api, { method: 'DELETE' })
                 const data = await response.json();
                 setTurmas(data);
-                console.log(data);
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
@@ -138,7 +133,6 @@ const Listarsalas = () => {
                 })
                 const data = await response.json();
                 setSalas(data);
-                console.log(data);
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
