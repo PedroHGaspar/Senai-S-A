@@ -11,22 +11,21 @@ const ListarProfessores = () => {
     const [selectedProfessor, setSelectedProfessor] = useState(null);
 
     useEffect(() => {
-
-        const fetchProfessores = async () => {
-            try {
-                let api = `https://senai-back-end.onrender.com/professores/lista`;
-                let response = await fetch(api)
-                const data = await response.json();
-                setProfessores(data);
-                //console.log(data);
-
-            } catch (error) {
-                console.error('Deu ruim: ', error)
-            }
-        }
-
         fetchProfessores();
-    }, [professores])
+    }, [])
+
+    const fetchProfessores = async () => {
+        try {
+            let api = `https://senai-back-end.onrender.com/professores/lista`;
+            let response = await fetch(api)
+            const data = await response.json();
+            setProfessores(data);
+            //console.log(data);
+
+        } catch (error) {
+            console.error('Deu ruim: ', error)
+        }
+    }
 
     //Modal de cadastro e edição
     const openModal = () => {
@@ -83,6 +82,7 @@ const ListarProfessores = () => {
 
         fetchData();
         closeModal();
+        fetchProfessores();
     };
 
     //EXCLUSÃO (DELETE)
@@ -101,6 +101,7 @@ const ListarProfessores = () => {
         }
 
         fetchData();
+        fetchProfessores();
     }
 
     //EDIÇÃO (PUT)
@@ -137,6 +138,7 @@ const ListarProfessores = () => {
 
         fetchData();
         closeModal();
+        fetchProfessores();
     }
 
     return (

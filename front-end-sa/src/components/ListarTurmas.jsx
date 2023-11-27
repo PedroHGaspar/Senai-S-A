@@ -11,22 +11,21 @@ const ListarTurmas = () => {
     const [selectedTurmas, setSelectedTurmas] = useState(null);
 
     useEffect(() => {
+        fetchTurmas();
+    }, [])
 
-        const fetchData = async () => {
-            try {
-                let api = `https://senai-back-end.onrender.com/turmas/lista`;
-                let response = await fetch(api)
-                const data = await response.json();
-                setTurmas(data);
-                //console.log(data);
+    const fetchTurmas = async () => {
+        try {
+            let api = `https://senai-back-end.onrender.com/turmas/lista`;
+            let response = await fetch(api)
+            const data = await response.json();
+            setTurmas(data);
+            //console.log(data);
 
-            } catch (error) {
-                console.error('Deu ruim: ', error)
-            }
+        } catch (error) {
+            console.error('Deu ruim: ', error)
         }
-
-        fetchData();
-    }, [turmas])
+    }
 
     //Modal de cadastro e edição
     const openModal = () => {
@@ -83,6 +82,7 @@ const ListarTurmas = () => {
 
         fetchData();
         closeModal();
+        fetchTurmas();
     }
 
     //EXCLUSÃO (DELETE)
@@ -102,6 +102,7 @@ const ListarTurmas = () => {
         }
 
         fetchData();
+        fetchTurmas();
     }
 
     //EDIÇÃO (PUT)
@@ -138,6 +139,7 @@ const ListarTurmas = () => {
 
         fetchData();
         closeModal();
+        fetchTurmas();
     }
 
     return (

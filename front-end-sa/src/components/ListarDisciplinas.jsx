@@ -12,22 +12,23 @@ const ListarDisciplinas = () => {
     const [selectedDisciplinas, setSelectedDisciplinas] = useState(null);
 
     useEffect(() => {
+        fetchDisciplinas();
+    }, [])
 
-        const fetchData = async () => {
-            try {
-                let api = `https://senai-back-end.onrender.com/disciplina/lista`;
-                let response = await fetch(api)
-                const data = await response.json();
-                setDisciplinas(data);
-                console.log(data);
 
-            } catch (error) {
-                console.error('Deu ruim: ', error)
-            }
+    const fetchDisciplinas = async () => {
+        try {
+            let api = `https://senai-back-end.onrender.com/disciplina/lista`;
+            let response = await fetch(api)
+            const data = await response.json();
+            setDisciplinas(data);
+            console.log(data);
+
+        } catch (error) {
+            console.error('Deu ruim: ', error)
         }
+    }
 
-        fetchData();
-    }, [disciplinas])
 
     //Modal de cadastro e edição
     const openModal = () => {
@@ -89,6 +90,7 @@ const ListarDisciplinas = () => {
 
         fetchData();
         closeModal();
+        fetchDisciplinas();
     }
 
     //EXCLUSÃO (DELETE)
@@ -107,6 +109,7 @@ const ListarDisciplinas = () => {
         }
 
         fetchData();
+        fetchDisciplinas();
     }
 
     //EDIÇÃO (PUT)
@@ -145,6 +148,7 @@ const ListarDisciplinas = () => {
 
         fetchData();
         closeModal();
+        fetchDisciplinas();
     }
 
     return (
