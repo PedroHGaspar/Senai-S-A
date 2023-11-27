@@ -42,3 +42,27 @@ svg{
     overflow-x: hidden;
     overflow-y: auto;
 }
+.week-day{
+    display: flex;
+    flex-direction: column;
+    align-items:   center;
+    justify-content:flex-start;
+    width: 35%;
+    max-height: 150px;
+}
+/* Estilos para o fundo desfocado */
+.modal-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    backdrop-filter: blur(5px);
+}
+
+
+.botao-fechar-modal {
+    color: #ffffff
+}
