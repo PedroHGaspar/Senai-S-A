@@ -1,5 +1,5 @@
 * {
-  background: #FFF;
+  background: #fff;
 }
 
 :root {
@@ -57,7 +57,7 @@ button {
 .modal {
   display: flex;
   flex-direction: column;
-  width: auto;
+  width: 30%;
   height: auto;
   border-radius: 10px;
   position: fixed;
@@ -76,9 +76,7 @@ button {
   gap: 15px;
   justify-content: end;
   margin-top: 30px;
-
 }
-
 
 .modal h2 {
   margin-top: 0px;
@@ -99,7 +97,6 @@ button {
   background-color: #333;
 }
 
-
 .botao-fechar-modal:hover {
   background-color: rgba(65, 63, 63, 0.904);
 }
@@ -107,12 +104,7 @@ button {
 button:hover {
   transition: 0.25s;
   background-color: #1046b9;
-
 }
-
-
-
-
 
 /*
 Inputs modal
@@ -133,9 +125,7 @@ input {
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
   width: 300px;
   color: #333;
-
 }
-
 
 .input-grupo-modal {
   display: flex;
@@ -177,9 +167,6 @@ Input modal transitions
   animation: input-focus 0.3s ease;
 }
 
-
-
-
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
@@ -197,4 +184,20 @@ Input modal transitions
 
 .App {
   width: 100%;
+}
+
+.inputs-ensalar {
+  display: flex;
+  width: 40%;
+  flex-direction: column;
+  justify-content: center;
+  height: 20%;
+  gap: 20px;
+}
+
+.select-class {
+  border: none;
+  padding: 1rem;
+  background: #eee;
+  border-radius: 5px;
 }
