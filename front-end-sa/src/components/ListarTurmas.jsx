@@ -45,7 +45,7 @@ const ListarTurmas = () => {
     }
 
     //CADASTRO (POST)
-    const handleCadastrar = () => {
+    const handleCadastrar = async () => {
         const fetchData = async () => {
 
             //Gerador de ID que busca o ID mais alto, e adciona +1
@@ -55,13 +55,14 @@ const ListarTurmas = () => {
             if (id_creator <= 99999) {
                 try {
                     let api = `https://senai-back-end.onrender.com/turmas/postar`;
+                    const body = {
+                        id_turma: id_creator,
+                        nm_turma: `${newTurma}`,
+                        qtd_alunos: newQtdAlunos
+                    }
                     let response = await fetch(api, {
                         method: 'POST',
-                        body: JSON.stringify({
-                            "id_turma": id_creator,
-                            "nm_turma": `${newTurma}`,
-                            "qtd_alunos": newQtdAlunos
-                        }),
+                        body: JSON.stringify(body),
                         headers: {
                             "Content-type": "application/json; charset=UTF-8"
                         }
@@ -77,28 +78,27 @@ const ListarTurmas = () => {
             }
         }
 
-        fetchData();
+        await fetchData();
         closeModal();
-        fetchTurmas();
+        await fetchTurmas();
     }
 
     //EXCLUSÃO (DELETE)
-    const handleExcluir = (id_turma) => {
+    const handleExcluir = async (id_turma) => {
 
         const fetchData = async () => {
             try {
                 let api = `https://senai-back-end.onrender.com/turmas/deletar/${id_turma}`;
                 let response = await fetch(api, { method: 'DELETE' })
-                const data = await response.json();
-                setTurmas(data);
+                await response.json();
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
             }
         }
 
-        fetchData();
-        fetchTurmas();
+        await fetchData();
+        await fetchTurmas();
     }
 
     //EDIÇÃO (PUT)
@@ -109,7 +109,7 @@ const ListarTurmas = () => {
         openModal();
     }
 
-    const handleSalvarEdicao = (id_turma) => {
+    const handleSalvarEdicao = async (id_turma) => {
 
         const fetchData = async () => {
             try {
@@ -132,9 +132,9 @@ const ListarTurmas = () => {
             }
         }
 
-        fetchData();
+        await fetchData();
         closeModal();
-        fetchTurmas();
+        await fetchTurmas();
     }
 
     return (

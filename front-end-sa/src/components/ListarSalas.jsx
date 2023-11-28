@@ -49,7 +49,7 @@ const Listarsalas = () => {
     }
 
     //CADASTRO (POST)
-    const handleCadastrar = () => {
+    const handleCadastrar = async () => {
         const fetchData = async () => {
 
             //Gerador de ID que busca o ID mais alto, e adciona +1
@@ -59,20 +59,20 @@ const Listarsalas = () => {
             if (id_creator <= 99999) {
                 try {
                     let api = `https://senai-back-end.onrender.com/salas/postar`;
+                    const body = {
+                        id_sala: id_creator,
+                        num_sala: newSalas,
+                        qtd_maxima: newQtdMax,
+                        tipo: `${newTipo}`
+                    }
                     let response = await fetch(api, {
                         method: 'POST',
-                        body: JSON.stringify({
-                            "id_sala": id_creator,
-                            "num_sala": newSalas,
-                            "qtd_maxima": newQtdMax,
-                            "tipo": `${newTipo}`
-                        }),
+                        body: JSON.stringify(body),
                         headers: {
                             "Content-type": "application/json; charset=UTF-8"
                         }
                     })
-                    const data = await response.json();
-                    setSalas(data);
+                    await response.json();
 
                 } catch (error) {
                     console.error('Deu ruim: ', error)
@@ -82,28 +82,26 @@ const Listarsalas = () => {
             }
         }
 
-        fetchData();
+        await fetchData();
         closeModal();
-        fetchSalas();
+        await fetchSalas();
     }
 
     //EXCLUSÃO (DELETE)
-    const handleExcluir = (id_sala) => {
-
+    const handleExcluir = async (id_sala) => {
         const fetchData = async () => {
             try {
                 let api = `https://senai-back-end.onrender.com/salas/deletar/${id_sala}`;
                 let response = await fetch(api, { method: 'DELETE' })
-                const data = await response.json();
-                setTurmas(data);
+                await response.json();
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
             }
         }
 
-        fetchData();
-        fetchSalas();
+        await fetchData();
+        await fetchSalas();
     }
 
     //EDIÇÃO (PUT)
@@ -115,7 +113,7 @@ const Listarsalas = () => {
         openModal();
     }
 
-    const handleSalvarEdicao = (id_sala) => {
+    const handleSalvarEdicao = async (id_sala) => {
 
         const fetchData = async () => {
             try {
@@ -139,9 +137,9 @@ const Listarsalas = () => {
             }
         }
 
-        fetchData();
+        await fetchData();
         closeModal();
-        fetchSalas();
+        await fetchSalas();
     }
 
     return (

@@ -22,7 +22,6 @@ const ListarDisciplinas = () => {
             let response = await fetch(api)
             const data = await response.json();
             setDisciplinas(data);
-
         } catch (error) {
             console.error('Deu ruim: ', error)
         }
@@ -52,7 +51,7 @@ const ListarDisciplinas = () => {
     }
 
     //CADASTRO (POST)
-    const handleCadastrar = () => {
+    const handleCadastrar = async () => {
         const fetchData = async () => {
 
             //Gerador de ID que busca o ID mais alto, e adciona +1
@@ -62,21 +61,20 @@ const ListarDisciplinas = () => {
             if (id_creator <= 99999) {
                 try {
                     let api = `https://senai-back-end.onrender.com/disciplina/postar`;
+                    const body = {
+                        id_discip: id_creator,
+                        nm_disciplina: `${newDisciplina}`,
+                        qtd_dias: newQtdDias,
+                        num_fase: newNumFase
+                    }
                     let response = await fetch(api, {
                         method: 'POST',
-                        body: JSON.stringify({
-                            "id_discip": id_creator,
-                            "nm_disciplina": `${newDisciplina}`,
-                            "qtd_dias": newQtdDias,
-                            "num_fase": newNumFase
-                        }),
+                        body: JSON.stringify(body),
                         headers: {
                             "Content-type": "application/json; charset=UTF-8"
                         }
                     })
-                    const data = await response.json();
-                    setDisciplinas(data);
-
+                    await response.json();
                 } catch (error) {
                     console.error('Deu ruim: ', error)
                 }
@@ -85,27 +83,26 @@ const ListarDisciplinas = () => {
             }
         }
 
-        fetchData();
+        await fetchData();
         closeModal();
-        fetchDisciplinas();
+        await fetchDisciplinas();
     }
 
     //EXCLUSÃO (DELETE)
-    const handleExcluir = (id_discip) => {
+    const handleExcluir = async (id_discip) => {
         const fetchData = async () => {
             try {
                 let api = `https://senai-back-end.onrender.com/disciplina/deletar/${id_discip}`;
                 let response = await fetch(api, { method: 'DELETE' })
-                const data = await response.json();
-                setDisciplinas(data);
+                await response.json();
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
             }
         }
 
-        fetchData();
-        fetchDisciplinas();
+        await fetchData();
+        await fetchDisciplinas();
     }
 
     //EDIÇÃO (PUT)
@@ -117,7 +114,7 @@ const ListarDisciplinas = () => {
         openModal();
     }
 
-    const handleSalvarEdicao = (id_discip) => {
+    const handleSalvarEdicao = async (id_discip) => {
 
         const fetchData = async () => {
             try {
@@ -134,16 +131,16 @@ const ListarDisciplinas = () => {
                     }
                 })
                 const data = await response.json();
-                setSalas(data);
+                setDisciplinas(data);
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
             }
         }
 
-        fetchData();
+        await fetchData();
         closeModal();
-        fetchDisciplinas();
+        await fetchDisciplinas();
     }
 
     return (
