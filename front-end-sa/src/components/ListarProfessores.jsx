@@ -34,7 +34,7 @@ const ListarProfessores = () => {
         setIsModalOpen(false);
         setSelectedProfessor(null);
         setNewProfessorName('');
-        setNewDisp('')
+        setNewDisp('');
     }
 
     const handleNameChange = (e) => {
@@ -45,7 +45,7 @@ const ListarProfessores = () => {
     }
 
     //CADASTRO (POST)
-    const handleCadastrar = () => {
+    const handleCadastrar = async () => {
         const fetchData = async () => {
 
             //Gerador de ID que busca o ID mais alto, e adciona +1
@@ -55,19 +55,19 @@ const ListarProfessores = () => {
             if (id_creator <= 99999) {
                 try {
                     let api = `https://senai-back-end.onrender.com/professores/postar`;
+                    const body = {
+                        id_prof: id_creator,
+                        nome: `${newProfessorName}`,
+                        disp_semana: `${newDisp}`
+                    }
                     let response = await fetch(api, {
                         method: 'POST',
-                        body: JSON.stringify({
-                            id_prof: id_creator,
-                            nome: `${newProfessorName}`,
-                            disp_semana: `${newDisp}`
-                        }),
+                        body: JSON.stringify(body),
                         headers: {
                             'Content-type': 'application/json; charset=UTF-8'
                         }
                     });
-                    const data = await response.json();
-                    setProfessores(data);
+                    await response.json();
                 } catch (error) {
                     console.error('Deu ruim: ', error);
                 }
@@ -76,27 +76,26 @@ const ListarProfessores = () => {
             }
         };
 
-        fetchData();
+        await fetchData();
         closeModal();
-        fetchProfessores();
+        await fetchProfessores();
     };
 
     //EXCLUSÃO (DELETE)
-    const handleExcluir = (id_prof) => {
+    const handleExcluir = async (id_prof) => {
         const fetchData = async () => {
             try {
                 let api = `https://senai-back-end.onrender.com/professores/deletar/${id_prof}`;
                 let response = await fetch(api, { method: 'DELETE' })
-                const data = await response.json();
-                setProfessores(data);
+                await response.json();
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
             }
         }
 
-        fetchData();
-        fetchProfessores();
+        await fetchData();
+        await fetchProfessores();
     }
 
     //EDIÇÃO (PUT)
@@ -107,7 +106,7 @@ const ListarProfessores = () => {
         openModal();
     }
 
-    const handleSalvarEdicao = (id_prof) => {
+    const handleSalvarEdicao = async (id_prof) => {
 
         const fetchData = async () => {
             try {
@@ -122,17 +121,16 @@ const ListarProfessores = () => {
                         "Content-type": "application/json; charset=UTF-8"
                     }
                 })
-                const data = await response.json();
-                setProfessores(data);
+                await response.json();
 
             } catch (error) {
                 console.error('Deu ruim: ', error)
             }
         }
 
-        fetchData();
+        await fetchData();
         closeModal();
-        fetchProfessores();
+        await fetchProfessores();
     }
 
     return (
