@@ -9,6 +9,8 @@ const ListarTurmas = () => {
     const [newQtdAlunos, setNewQtdAlunos] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedTurmas, setSelectedTurmas] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [deleteId, setDeleteId] = useState('');
 
     useEffect(() => {
         fetchTurmas();
@@ -35,6 +37,12 @@ const ListarTurmas = () => {
         setSelectedTurmas(null);
         setNewTurma('');
         setNewQtdAlunos('');
+        setIsDeleteModalOpen(false)
+    }
+    //Modal de Delete
+    const openDeleteModal = (idDelete) => {
+        setIsDeleteModalOpen(true);
+        setDeleteId(idDelete);
     }
 
     const handleNameChange = (e) => {
@@ -99,6 +107,7 @@ const ListarTurmas = () => {
 
         await fetchData();
         await fetchTurmas();
+        closeModal();
     }
 
     //EDIÇÃO (PUT)
@@ -148,7 +157,7 @@ const ListarTurmas = () => {
                             <button className='button-editar' onClick={() => handleEditar(turma)}>
                                 <FaEdit />
                             </button>
-                            <button className='button-excluir' onClick={() => handleExcluir(turma.id_turma)}>
+                            <button className='button-excluir' onClick={() => openDeleteModal(turma.id_turma)}>
                                 <FaTrash />
                             </button>
                         </div>
@@ -183,6 +192,19 @@ const ListarTurmas = () => {
                                 {selectedTurmas ? 'Salvar' : 'Cadastrar'}
                             </button>
                             <button onClick={closeModal} className="botao-fechar-modal">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {isDeleteModalOpen && (
+                <div className="modal-background">
+                    <div className="modal">
+                        <h2>Tem certeza que deseja excluir?</h2>
+                        <div className='button-grupo-modal'>
+                            <button className='botao-salvar-modal' onClick={() => handleExcluir(deleteId)}>
+                                Sim
+                            </button>
+                            <button onClick={closeModal} className="botao-fechar-modal">Não</button>
                         </div>
                     </div>
                 </div>

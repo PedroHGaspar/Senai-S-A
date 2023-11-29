@@ -10,6 +10,8 @@ const ListarDisciplinas = () => {
     const [newNumFase, setNewNumFase] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedDisciplinas, setSelectedDisciplinas] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [deleteId, setDeleteId] = useState('');
 
     useEffect(() => {
         fetchDisciplinas();
@@ -38,6 +40,13 @@ const ListarDisciplinas = () => {
         setNewDisciplina('');
         setNewQtdDias('');
         setNewNumFase('');
+        setIsDeleteModalOpen(false)
+    }
+
+    //Modal de Delete
+    const openDeleteModal = (idDelete) => {
+        setIsDeleteModalOpen(true);
+        setDeleteId(idDelete);
     }
 
     const handleNameChange = (e) => {
@@ -55,8 +64,11 @@ const ListarDisciplinas = () => {
         const fetchData = async () => {
 
             //Gerador de ID que busca o ID mais alto, e adciona +1
-            const idMaisAlto = Math.max(...disciplinas.disciplinasLista.map(disciplina => disciplina.id_discip));
-            let id_creator = idMaisAlto + 1;
+            // const idMaisAlto = Math.max(...disciplinas.disciplinasLista.map(disciplina => disciplina.id_discip));
+            // let id_creator = idMaisAlto + 1;
+
+            // Modifiquei o gerador de ID porque eu tava tentando criar disciplina e não criava pq o id vinha null
+            let id_creator = Math.random().toString(5).slice(2 , 7);
 
             if (id_creator <= 99999) {
                 try {
@@ -75,6 +87,7 @@ const ListarDisciplinas = () => {
                         }
                     })
                     await response.json();
+                    console.log(id_creator)
                 } catch (error) {
                     console.error('Deu ruim: ', error)
                 }
@@ -103,6 +116,7 @@ const ListarDisciplinas = () => {
 
         await fetchData();
         await fetchDisciplinas();
+        closeModal();
     }
 
     //EDIÇÃO (PUT)
@@ -154,7 +168,7 @@ const ListarDisciplinas = () => {
                             <button className='button-editar' onClick={() => handleEditar(disciplina)}>
                                 <FaEdit />
                             </button>
-                            <button className='button-excluir' onClick={() => handleExcluir(disciplina.id_discip)}>
+                            <button className='button-excluir' onClick={() => openDeleteModal(disciplina.id_discip)}>
                                 <FaTrash />
                             </button>
                         </div>
@@ -196,6 +210,19 @@ const ListarDisciplinas = () => {
                                 {selectedDisciplinas ? 'Salvar' : 'Cadastrar'}
                             </button>
                             <button onClick={closeModal} className="botao-fechar-modal">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {isDeleteModalOpen && (
+                <div className="modal-background">
+                    <div className="modal">
+                        <h2>Tem certeza que deseja excluir?</h2>
+                        <div className='button-grupo-modal'>
+                            <button className='botao-salvar-modal' onClick={() => handleExcluir(deleteId)}>
+                                Sim
+                            </button>
+                            <button onClick={closeModal} className="botao-fechar-modal">Não</button>
                         </div>
                     </div>
                 </div>

@@ -9,6 +9,8 @@ const ListarProfessores = () => {
     const [newDisp, setNewDisp] = useState('');
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProfessor, setSelectedProfessor] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [deleteId, setDeleteId] = useState('');
 
     useEffect(() => {
         fetchProfessores();
@@ -35,6 +37,12 @@ const ListarProfessores = () => {
         setSelectedProfessor(null);
         setNewProfessorName('');
         setNewDisp('');
+        setIsDeleteModalOpen(false)
+    }
+    //Modal de Delete
+    const openDeleteModal = (idDelete) => {
+        setIsDeleteModalOpen(true);
+        setDeleteId(idDelete);
     }
 
     const handleNameChange = (e) => {
@@ -83,6 +91,7 @@ const ListarProfessores = () => {
 
     //EXCLUSÃO (DELETE)
     const handleExcluir = async (id_prof) => {
+        
         const fetchData = async () => {
             try {
                 let api = `https://senai-back-end.onrender.com/professores/deletar/${id_prof}`;
@@ -95,7 +104,9 @@ const ListarProfessores = () => {
         }
 
         await fetchData();
+        closeModal();
         await fetchProfessores();
+        
     }
 
     //EDIÇÃO (PUT)
@@ -129,8 +140,8 @@ const ListarProfessores = () => {
         }
 
         await fetchData();
-        closeModal();
         await fetchProfessores();
+        closeModal();
     }
 
     return (
@@ -144,7 +155,7 @@ const ListarProfessores = () => {
                             <button className='button-editar' onClick={() => handleEditar(professor)}>
                                 <FaEdit />
                             </button>
-                            <button className='button-excluir' onClick={() => handleExcluir(professor.id_prof)}>
+                            <button className='button-excluir' onClick={() => openDeleteModal(professor.id_prof)}>
                                 <FaTrash />
                             </button>
                         </div>
@@ -181,6 +192,19 @@ const ListarProfessores = () => {
                             </button>
 
                             <button onClick={closeModal} className="botao-fechar-modal">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {isDeleteModalOpen && (
+                <div className="modal-background">
+                    <div className="modal">
+                        <h2>Tem certeza que deseja excluir?</h2>
+                        <div className='button-grupo-modal'>
+                            <button className='botao-salvar-modal' onClick={() => handleExcluir(deleteId)}>
+                                Sim
+                            </button>
+                            <button onClick={closeModal} className="botao-fechar-modal">Não</button>
                         </div>
                     </div>
                 </div>
