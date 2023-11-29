@@ -189,7 +189,7 @@ Input modal transitions
 .inputs-ensalar {
   display: flex;
   width: 40%;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   height: 20%;
   gap: 20px;
