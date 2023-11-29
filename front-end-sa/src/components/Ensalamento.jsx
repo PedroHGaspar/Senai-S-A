@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "../style/ensalamento.css";
 
 const Ensalamento = () => {
@@ -8,6 +8,12 @@ const Ensalamento = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fase, setFase] = useState();
   const [curso, setCurso] = useState();
+  const [selectedInfo, setSelectedInfo] = useState({
+    professor: "",
+    disciplina: "",
+    sala: "",
+  });
+  const [cards, setCards] = useState([]);
 
   useEffect(() => {
     fetchDisciplina();
@@ -16,18 +22,27 @@ const Ensalamento = () => {
   }, []);
 
   const handleCurso = (evento) => {
-    setCurso(evento.target.value); // atualiza o estado com o valor selecionado
+    setCurso(evento.target.value);
   };
 
   const handleFase = (evento) => {
-    setFase(evento.target.value); // atualiza o estado com o valor selecionado
+    setFase(evento.target.value);
   };
 
-  const openModal = () => {
+  const openModal = (day) => {
     setIsModalOpen(true);
+    // Aqui você pode definir as informações iniciais se necessário
+    setSelectedInfo({ professor: "", disciplina: "", sala: "", day });
   };
+
+  const addCard = () => {
+    setCards([...cards, selectedInfo]);
+    closeModal();
+  };
+
   const closeModal = () => {
     setIsModalOpen(false);
+    setSelectedInfo({ professor: "", disciplina: "", sala: "", day: "" });
   };
 
   const fetchDisciplina = async () => {
@@ -36,45 +51,44 @@ const Ensalamento = () => {
       let response = await fetch(api);
       const data = await response.json();
       setDisciplinas(data);
-      console.log(data);
     } catch (error) {
       console.error("Deu ruim: ", error);
     }
   };
+
   const fetchProfessores = async () => {
     try {
       let api = `https://senai-back-end.onrender.com/professores/lista`;
       let response = await fetch(api);
       const data = await response.json();
       setProfessores(data);
-      console.log(data);
     } catch (error) {
       console.error("Deu ruim: ", error);
     }
   };
+
   const fetchSalas = async () => {
     try {
       let api = `https://senai-back-end.onrender.com/salas/lista`;
       let response = await fetch(api);
       const data = await response.json();
       setSalas(data);
-      console.log(data);
     } catch (error) {
       console.error("Deu ruim: ", error);
     }
   };
 
+  const days = ["SEG", "TER", "QUA", "QUI", "SEX"];
+
   return (
     <div className="container">
       <h1 className="title-header">Ensalar</h1>
       <div className="inputs-ensalar">
-        {/* escolher curso */}
         <select className="select-class" value={curso} onChange={handleCurso}>
           <option value="">Escolher Curso</option>
           <option value="Desenvolvimento">Desenvolvimento</option>
         </select>
 
-        {/* escolher fase */}
         <select className="select-class" value={fase} onChange={handleFase}>
           <option value="">Escolher Fase</option>
           <option value="Fase 4">Fase 4</option>
@@ -86,46 +100,28 @@ const Ensalamento = () => {
             className="container-lista lista-scroll"
             style={{ display: "flex", gap: "20px" }}
           >
-            <div className="week-day">
-              <h2>SEG</h2>
-              <div>
-                <button className="botao-cadastrar" onClick={openModal}>
-                  Ensalar
-                </button>
+            {days.map((day, index) => (
+              <div key={index} className="week-day">
+                <h2>{day}</h2>
+                <div>
+                  <button
+                    className="botao-cadastrar"
+                    onClick={() => openModal(day)}
+                  >
+                    Ensalar
+                  </button>
+                </div>
+                {cards
+                  .filter((card) => card.day === day)
+                  .map((card, cardIndex) => (
+                    <div key={cardIndex} className="card">
+                      <p>{card.professor}</p>
+                      <p>{card.disciplina}</p>
+                      <p>{card.sala}</p>
+                    </div>
+                  ))}
               </div>
-            </div>
-            <div className="week-day">
-              <h2>TER</h2>
-              <div>
-                <button className="botao-cadastrar" onClick={openModal}>
-                  Ensalar
-                </button>
-              </div>
-            </div>
-            <div className="week-day">
-              <h2>QUA</h2>
-              <div>
-                <button className="botao-cadastrar" onClick={openModal}>
-                  Ensalar
-                </button>
-              </div>
-            </div>
-            <div className="week-day">
-              <h2>QUI</h2>
-              <div>
-                <button className="botao-cadastrar" onClick={openModal}>
-                  Ensalar
-                </button>
-              </div>
-            </div>
-            <div className="week-day">
-              <h2>SEX</h2>
-              <div>
-                <button className="botao-cadastrar" onClick={openModal}>
-                  Ensalar
-                </button>
-              </div>
-            </div>
+            ))}
           </ul>
         </>
       )}
@@ -133,11 +129,17 @@ const Ensalamento = () => {
       {isModalOpen && (
         <div className="modal-background">
           <div className="modal">
-            {/* Professores Select */}
-            {/* <div>Professor</div> */}
             <br />
             {professores && (
-              <select className="select-class">
+              <select
+                className="select-class"
+                onChange={(e) =>
+                  setSelectedInfo({
+                    ...selectedInfo,
+                    professor: e.target.value,
+                  })
+                }
+              >
                 <option>Escolher Professor</option>
                 {Object.values(professores.professoresLista || {}).map(
                   (professor) => (
@@ -149,11 +151,17 @@ const Ensalamento = () => {
               </select>
             )}
 
-            {/* Disciplinas Select */}
-            {/* <div>Disciplina</div> */}
             <br />
             {disciplinas && (
-              <select className="select-class">
+              <select
+                className="select-class"
+                onChange={(e) =>
+                  setSelectedInfo({
+                    ...selectedInfo,
+                    disciplina: e.target.value,
+                  })
+                }
+              >
                 <option>Escolher Disciplina</option>
                 {Object.values(disciplinas.disciplinasLista || {}).map(
                   (disciplina) => (
@@ -168,11 +176,14 @@ const Ensalamento = () => {
               </select>
             )}
 
-            {/* Salas Select */}
-            {/* <div>Sala</div> */}
             <br />
             {salas && (
-              <select className="select-class">
+              <select
+                className="select-class"
+                onChange={(e) =>
+                  setSelectedInfo({ ...selectedInfo, sala: e.target.value })
+                }
+              >
                 <option>Escolher Sala</option>
                 {Object.values(salas.salasLista || {}).map((sala) => (
                   <option value={sala.num_sala} key={sala.id_sala}>
@@ -182,7 +193,7 @@ const Ensalamento = () => {
               </select>
             )}
             <div className="button-grupo-modal">
-              <button onClick={closeModal} className="botao-salvar-modal">
+              <button onClick={addCard} className="botao-salvar-modal">
                 Salvar
               </button>
               <button onClick={closeModal} className="botao-fechar-modal">
@@ -193,7 +204,6 @@ const Ensalamento = () => {
         </div>
       )}
 
-      {/* caso não tenha escolhido fase ou curso não vai aparecer os dias da semana */}
       {(!fase || !curso) && (
         <>
           <ul className="container-lista lista-scroll"></ul>
