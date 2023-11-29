@@ -69,14 +69,17 @@ svg{
 
 
 .card {
+    width: 120px;
+    height: 142px;
     margin-top: 10px;
     padding: 10px;
     border: 1px solid #1A58DD;
-    background: rgb(26, 88, 221);
-    border-radius: 8px;
-    background-color: #f0f0f0; /* Adicione uma cor de fundo se desejar */
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Adicione uma sombra se desejar */
+    border-radius: 8px; 
   }
+
   
   
-  
+.container .lista-scroll{
+    display: block; 
+    overflow: auto;
+}

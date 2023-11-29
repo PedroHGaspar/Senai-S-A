@@ -5,6 +5,8 @@ const Ensalamento = () => {
   const [disciplinas, setDisciplinas] = useState([]);
   const [professores, setProfessores] = useState([]);
   const [salas, setSalas] = useState([]);
+  const [turmas, setTurmas] = useState([]);
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [fase, setFase] = useState();
   const [curso, setCurso] = useState();
@@ -12,6 +14,7 @@ const Ensalamento = () => {
     professor: "",
     disciplina: "",
     sala: "",
+    turma: "",
   });
   const [cards, setCards] = useState([]);
 
@@ -19,6 +22,7 @@ const Ensalamento = () => {
     fetchDisciplina();
     fetchProfessores();
     fetchSalas();
+    fetchTurmas();
   }, []);
 
   const handleCurso = (evento) => {
@@ -32,7 +36,7 @@ const Ensalamento = () => {
   const openModal = (day) => {
     setIsModalOpen(true);
     // Aqui você pode definir as informações iniciais se necessário
-    setSelectedInfo({ professor: "", disciplina: "", sala: "", day });
+    setSelectedInfo({ professor: "", disciplina: "", sala: "", turma: "" ,day   });
   };
 
   const addCard = () => {
@@ -42,7 +46,7 @@ const Ensalamento = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedInfo({ professor: "", disciplina: "", sala: "", day: "" });
+    setSelectedInfo({ professor: "", disciplina: "", sala: "",turma: "" ,day: ""   });
   };
 
   const fetchDisciplina = async () => {
@@ -73,6 +77,16 @@ const Ensalamento = () => {
       let response = await fetch(api);
       const data = await response.json();
       setSalas(data);
+    } catch (error) {
+      console.error("Deu ruim: ", error);
+    }
+  };
+  const fetchTurmas = async () => {
+    try {
+      let api = `https://senai-back-end.onrender.com/turmas/lista`;
+      let response = await fetch(api);
+      const data = await response.json();
+      setTurmas(data);
     } catch (error) {
       console.error("Deu ruim: ", error);
     }
@@ -115,9 +129,10 @@ const Ensalamento = () => {
                   .filter((card) => card.day === day)
                   .map((card, cardIndex) => (
                     <div key={cardIndex} className="card">
-                      <p>{card.professor}</p>
+                      <p>{card.professor}</p> 
                       <p>{card.disciplina}</p>
                       <p>{card.sala}</p>
+                      <p>{card.turma}</p>
                     </div>
                   ))}
               </div>
@@ -191,6 +206,22 @@ const Ensalamento = () => {
                   </option>
                 ))}
               </select>
+            )}
+            <br />
+            {turmas && (
+              <select
+                className="select-class"
+                onChange={(e) =>
+                  setSelectedInfo({ ...selectedInfo, turma: e.target.value })
+                }
+              >
+                <option>Escolher Turma</option>
+                {Object.values(turmas.turmasLista || {}).map((turma) => (
+                  <option value={turma.nm_turma} key={turma.id_turma}>
+                    {turma.nm_turma}
+                  </option>
+                ))}
+              </select> 
             )}
             <div className="button-grupo-modal">
               <button onClick={addCard} className="botao-salvar-modal">
